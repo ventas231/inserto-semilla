@@ -167,8 +167,39 @@ const Reveal = () => {
         </div>
       </section>
 
+      {/* Social sharing */}
+      <section className="py-16 sm:py-20 px-6 bg-background text-center">
+        <div className="max-w-md mx-auto">
+          <Sprout className="w-5 h-5 text-primary mx-auto mb-5" />
+          <p className="text-lg sm:text-xl font-serif text-foreground mb-4">
+            Hazla crecer más allá de tu maceta.
+          </p>
+          <p className="text-sm text-muted-foreground font-sans leading-relaxed mb-2">
+            Comparte tu plantita usando el hashtag
+          </p>
+          <p className="text-base font-serif text-primary mb-4">
+            #MiPlantitaSpecialFeetSox
+          </p>
+          <p className="text-sm text-muted-foreground font-sans mb-8">
+            Y etiquétanos para ver cómo florece contigo.
+          </p>
+          <Button
+            variant="elegant"
+            size="lg"
+            onClick={() => {
+              const text = encodeURIComponent(
+                `¡Descubrí que mi planta es ${data.name}! 🌱 #MiPlantitaSpecialFeetSox`
+              );
+              window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
+            }}
+          >
+            Compartir mi plantita
+          </Button>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="py-12 px-6 bg-background text-center">
+      <footer className="py-12 px-6 bg-secondary/30 text-center">
         <p className="text-xs text-muted-foreground font-sans tracking-wide">
           Papel Semilla · Una experiencia que florece
         </p>
