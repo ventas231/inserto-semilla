@@ -1,13 +1,32 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useRef } from "react";
+import HeroSection from "@/components/HeroSection";
+import StorytellingSection from "@/components/StorytellingSection";
+import BenefitsSection from "@/components/BenefitsSection";
+import MysterySection from "@/components/MysterySection";
+import EmailForm from "@/components/EmailForm";
 
 const Index = () => {
+  const formRef = useRef<HTMLDivElement>(null);
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <main className="min-h-screen bg-background">
+      <HeroSection onCtaClick={scrollToForm} />
+      <StorytellingSection />
+      <BenefitsSection />
+      <MysterySection onCtaClick={scrollToForm} />
+      <EmailForm formRef={formRef} />
+
+      {/* Footer */}
+      <footer className="py-12 px-6 bg-secondary/30 text-center">
+        <p className="text-xs text-muted-foreground font-sans tracking-wide">
+          Papel Semilla · Una experiencia que florece
+        </p>
+      </footer>
+    </main>
   );
 };
 
