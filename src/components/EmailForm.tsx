@@ -43,12 +43,8 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
 
     setIsSubmitting(true);
 
-    // Randomly assign plant and navigate
-    const plants = ["manzanilla", "flor-de-nube"] as const;
-    const plant = plants[Math.floor(Math.random() * plants.length)];
-
     setTimeout(() => {
-      navigate(`/revelacion/${plant}`);
+      navigate("/seleccionar");
     }, 800);
   };
 

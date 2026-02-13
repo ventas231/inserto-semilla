@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import manzanillaImg from "@/assets/manzanilla.jpg";
 import florDeNubeImg from "@/assets/flor-de-nube.jpg";
+import chiaImg from "@/assets/chia.jpg";
 import { Button } from "@/components/ui/button";
 import { Sprout, Droplets, Sun, Clock } from "lucide-react";
 
@@ -8,7 +9,6 @@ const plantData = {
   manzanilla: {
     name: "Manzanilla",
     image: manzanillaImg,
-    emoji: "🌼",
     description:
       "La manzanilla es una planta aromática milenaria, conocida por sus propiedades relajantes y su delicada belleza. Sus pequeñas flores blancas con centro dorado traerán calma y frescura a tu espacio.",
     instructions: [
@@ -27,7 +27,6 @@ const plantData = {
   "flor-de-nube": {
     name: "Flor de Nube",
     image: florDeNubeImg,
-    emoji: "☁️",
     description:
       "La flor de nube, también conocida como gypsophila, es una planta etérea y delicada. Sus diminutas flores blancas crean una nube de belleza suave, perfecta para decorar y alegrar cualquier rincón.",
     instructions: [
@@ -42,6 +41,24 @@ const plantData = {
     light: "Sol pleno. Necesita al menos 6 horas de luz directa al día.",
     videoUrl: "#",
     bgAccent: "bg-accent/40",
+  },
+  chia: {
+    name: "Chía",
+    image: chiaImg,
+    description:
+      "La chía es una planta ancestral valorada por sus semillas nutritivas y sus hermosas flores púrpuras. Fácil de cultivar y resistente, es perfecta para quienes inician en el mundo de las plantas.",
+    instructions: [
+      "Remoja el papel semilla en agua durante 2 a 3 horas.",
+      "Colócalo sobre tierra fértil y bien drenada.",
+      "Cúbrelo con una capa muy fina de sustrato.",
+      "Riega con un rociador manteniendo la humedad constante.",
+      "Ubícalo en un lugar cálido con buena luz natural.",
+    ],
+    germination: "7 a 10 días",
+    watering: "Riego moderado. Mantén la tierra húmeda sin encharcar.",
+    light: "Sol directo. Necesita al menos 6 horas de luz al día.",
+    videoUrl: "#",
+    bgAccent: "bg-primary/10",
   },
 };
 
