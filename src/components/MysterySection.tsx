@@ -28,34 +28,21 @@ const MysterySection = ({ onCtaClick }: MysterySectionProps) => {
         </p>
 
         <h2 className="text-3xl sm:text-4xl font-serif text-foreground mb-8">
-          Dos plantas, una sorpresa
+          Dentro de tu papel hay algo creciendo.
         </h2>
 
         <p className="text-lg text-foreground/80 font-sans leading-relaxed mb-6">
-          Tu papel semilla contiene una de estas dos plantas:
+          Cada papel semilla contiene una planta distinta.
+          <br />
+          El número impreso en el tuyo es la clave para descubrir cuál te tocó.
         </p>
 
-        <div className="flex justify-center gap-8 mb-8">
-          <div className="text-center">
-            <div className="w-20 h-20 rounded-full bg-accent/60 flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">🌼</span>
-            </div>
-            <p className="font-serif text-foreground">Manzanilla</p>
-          </div>
-          <div className="text-center">
-            <div className="w-20 h-20 rounded-full bg-accent/60 flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">☁️</span>
-            </div>
-            <p className="font-serif text-foreground">Flor de nube</p>
-          </div>
-        </div>
-
         <p className="text-base text-muted-foreground font-sans mb-10 italic">
-          ¿Cuál será la tuya? Solo hay una forma de saberlo.
+          Primero desbloquea tu acceso.
         </p>
 
         <Button variant="hero" size="xl" onClick={onCtaClick}>
-          Quiero revelar mi planta
+          Quiero descubrir la mía
         </Button>
       </div>
     </section>

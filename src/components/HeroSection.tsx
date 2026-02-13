@@ -40,7 +40,7 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
             Descubrir mi planta
           </Button>
           <p className="mt-4 text-sm text-muted-foreground font-sans">
-            Recibe tu guía gratuita directamente en tu correo.
+            Recibe tu guía gratuita.
           </p>
         </div>
       </div>
