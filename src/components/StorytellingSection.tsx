@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 
-const StorytellingSection = () => {
+interface StorytellingSectionProps {
+  onCtaClick: () => void;
+}
+
+const StorytellingSection = ({ onCtaClick }: StorytellingSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -16,27 +21,23 @@ const StorytellingSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24 sm:py-32 px-6 bg-secondary/40">
-      <div className={`max-w-xl mx-auto text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <section ref={sectionRef} className="py-24 sm:py-32 px-6 bg-secondary/40 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.03] to-transparent" />
+
+      <div className={`max-w-xl mx-auto text-center relative z-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="w-12 h-px bg-primary mx-auto mb-10" />
 
-        <p className="text-lg sm:text-xl leading-relaxed text-foreground/80 font-sans mb-8">
-          Cada fibra de este papel guarda una promesa silenciosa. Dentro de él, 
-          semillas reales esperan el momento perfecto para comenzar su viaje.
-        </p>
-
-        <p className="text-lg sm:text-xl leading-relaxed text-foreground/80 font-sans mb-8">
-          Lo que tienes en tus manos no es solo un papel —es el comienzo de algo vivo, 
-          algo que crece, algo que florece.
-        </p>
-
-        <h2 className="text-2xl sm:text-3xl font-serif italic text-foreground mb-6">
+        <h2 className="text-2xl sm:text-3xl font-serif italic text-foreground mb-8">
           ¿Qué planta se esconde dentro?
         </h2>
 
-        <p className="text-base text-muted-foreground font-sans">
+        <p className="text-base text-muted-foreground font-sans mb-10">
           Solo hay una forma de descubrirlo.
         </p>
+
+        <Button variant="hero" size="xl" onClick={onCtaClick}>
+          Descubrir mi planta
+        </Button>
 
         <div className="w-12 h-px bg-primary mx-auto mt-10" />
       </div>

@@ -21,15 +21,13 @@ const MysterySection = ({ onCtaClick }: MysterySectionProps) => {
     return () => observer.disconnect();
   }, []);
 
-  const plants = [
-    { label: "Planta 01" },
-    { label: "Planta 02" },
-    { label: "Planta 03" },
-  ];
-
   return (
-    <section ref={sectionRef} className="py-24 sm:py-32 px-6 bg-secondary/40">
-      <div className={`max-w-2xl mx-auto text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <section ref={sectionRef} className="py-24 sm:py-32 px-6 bg-secondary/40 relative overflow-hidden">
+      {/* Decorative background circles */}
+      <div className="absolute top-10 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-10 right-10 w-48 h-48 bg-accent/30 rounded-full blur-3xl" />
+
+      <div className={`max-w-2xl mx-auto text-center relative z-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-6 font-sans">
           El misterio
         </p>
@@ -38,27 +36,20 @@ const MysterySection = ({ onCtaClick }: MysterySectionProps) => {
           Una de estas está creciendo para ti…
         </h2>
 
-        <div className="grid grid-cols-3 gap-4 sm:gap-6 mb-12">
-          {plants.map((plant, i) => (
-            <div
-              key={i}
-              className={`group rounded-2xl border border-border/60 bg-background/80 backdrop-blur-sm p-6 sm:p-8 flex flex-col items-center gap-3 transition-all duration-700 hover:shadow-md hover:border-primary/30 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}
-              style={{ transitionDelay: `${300 + i * 150}ms` }}
-            >
-              <Sprout className="w-6 h-6 sm:w-7 sm:h-7 text-primary/70 group-hover:text-primary transition-colors duration-300" />
-              <p className="text-xs sm:text-sm font-sans text-muted-foreground tracking-wide">
-                {plant.label}
-              </p>
-              <span className="text-3xl sm:text-4xl font-serif text-primary/50 group-hover:text-primary transition-colors duration-300">
-                ?
-              </span>
-            </div>
-          ))}
+        {/* Single mystery card */}
+        <div
+          className={`mx-auto max-w-[200px] group rounded-2xl border border-border/60 bg-background/80 backdrop-blur-sm p-10 flex flex-col items-center gap-4 transition-all duration-700 hover:shadow-lg hover:border-primary/30 ${
+            isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-95'
+          }`}
+          style={{ transitionDelay: '400ms' }}
+        >
+          <Sprout className="w-8 h-8 text-primary/70 group-hover:text-primary transition-colors duration-300" />
+          <span className="text-5xl font-serif text-primary/50 group-hover:text-primary transition-colors duration-500" style={{ animation: 'gentlePulse 3s ease-in-out infinite' }}>
+            ?
+          </span>
         </div>
 
-        <p className="text-base sm:text-lg text-foreground/80 font-sans leading-relaxed mb-10">
+        <p className="text-base sm:text-lg text-foreground/80 font-sans leading-relaxed mt-12 mb-10">
           Cada papel semilla guarda una sorpresa distinta.
           <br />
           Descubre cuál te tocó.

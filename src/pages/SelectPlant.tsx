@@ -1,40 +1,88 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { z } from "zod";
 
-const options = [
-  { number: "01", plant: "manzanilla" },
-  { number: "02", plant: "flor-de-nube" },
-  { number: "03", plant: "chia" },
-];
+const codeMap: Record<string, string> = {
+  "00756": "manzanilla",
+  "00111": "flor-de-nube",
+  "00998": "chia",
+};
+
+const codeSchema = z.string().trim().min(1, "Ingresa el código de tu papel semilla");
 
 const SelectPlant = () => {
   const navigate = useNavigate();
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    const result = codeSchema.safeParse(code);
+    if (!result.success) {
+      setError(result.error.errors[0].message);
+      return;
+    }
+
+    const plant = codeMap[result.data];
+    if (!plant) {
+      setError("Código no válido. Revisa el número impreso en tu papel semilla.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setTimeout(() => {
+      navigate(`/revelacion/${plant}`);
+    }, 600);
+  };
 
   return (
-    <main className="min-h-screen bg-background flex items-center justify-center px-6">
-      <div className="max-w-md w-full text-center py-20">
+    <main className="min-h-screen bg-background flex items-center justify-center px-6 relative overflow-hidden">
+      <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-48 h-48 bg-accent/20 rounded-full blur-3xl" />
+
+      <div className="max-w-md w-full text-center py-20 relative z-10">
         <p className="animate-fade-up text-sm tracking-[0.3em] uppercase text-muted-foreground mb-6 font-sans">
           Último paso
         </p>
 
         <h1 className="animate-fade-up-delay-1 text-3xl sm:text-4xl font-serif text-foreground mb-4 leading-tight">
-          Busca el número en tu papel semilla
+          Busca el código en tu papel semilla
         </h1>
 
         <p className="animate-fade-up-delay-2 text-base text-muted-foreground font-sans mb-12">
-          Selecciona el número impreso en tu papel para revelar tu planta.
+          Ingresa el código impreso en tu papel para revelar tu planta.
         </p>
 
-        <div className="animate-fade-up-delay-3 flex flex-col gap-4">
-          {options.map(({ number, plant }) => (
-            <button
-              key={number}
-              onClick={() => navigate(`/revelacion/${plant}`)}
-              className="group w-full h-16 rounded-xl border border-border bg-card text-foreground font-serif text-2xl tracking-widest transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:border-primary hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
-            >
-              {number}
-            </button>
-          ))}
-        </div>
+        <form onSubmit={handleSubmit} className="animate-fade-up-delay-3 space-y-4">
+          <div>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={code}
+              onChange={(e) => { setCode(e.target.value); setError(""); }}
+              placeholder="Ej: 00756"
+              className="w-full h-16 px-6 rounded-xl border border-border bg-card text-foreground font-serif text-2xl text-center tracking-[0.3em] placeholder:text-muted-foreground/40 placeholder:tracking-[0.2em] placeholder:text-lg placeholder:font-sans focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300"
+              maxLength={10}
+            />
+            {error && (
+              <p className="mt-3 text-sm text-destructive font-sans">{error}</p>
+            )}
+          </div>
+
+          <Button
+            type="submit"
+            variant="hero"
+            size="xl"
+            className="w-full"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Revelando..." : "Revelar mi planta"}
+          </Button>
+        </form>
       </div>
     </main>
   );
