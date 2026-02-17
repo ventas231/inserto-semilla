@@ -16,8 +16,12 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
           className="w-full h-full object-cover"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-background/70 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/70 to-background/80 backdrop-blur-[2px]" />
       </div>
+
+      {/* Decorative elements */}
+      <div className="absolute top-20 right-20 w-32 h-32 bg-primary/10 rounded-full blur-2xl" />
+      <div className="absolute bottom-32 left-16 w-24 h-24 bg-accent/30 rounded-full blur-2xl" />
 
       {/* Content */}
       <div className="relative z-10 max-w-2xl mx-auto px-6 text-center py-20">

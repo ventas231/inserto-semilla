@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Sprout, Droplets, Sun, Clock, Play } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+interface BenefitsSectionProps {
+  onCtaClick?: () => void;
+}
 
 const benefits = [
   {
@@ -29,7 +34,7 @@ const benefits = [
   },
 ];
 
-const BenefitsSection = () => {
+const BenefitsSection = ({ onCtaClick }: BenefitsSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -45,8 +50,10 @@ const BenefitsSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24 sm:py-32 px-6 bg-background">
-      <div className="max-w-4xl mx-auto">
+    <section ref={sectionRef} className="py-24 sm:py-32 px-6 bg-background relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-72 h-72 bg-accent/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+
+      <div className="max-w-4xl mx-auto relative z-10">
         <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">
             Lo que recibirás
@@ -60,7 +67,7 @@ const BenefitsSection = () => {
           {benefits.map((benefit, index) => (
             <div
               key={benefit.title}
-              className={`p-8 rounded-xl bg-card border border-border/50 text-center transition-all duration-700 hover:shadow-md hover:-translate-y-1 ${
+              className={`p-8 rounded-xl bg-card border border-border/50 text-center transition-all duration-700 hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
               }`}
               style={{ transitionDelay: isVisible ? `${index * 100}ms` : '0ms' }}
@@ -73,6 +80,14 @@ const BenefitsSection = () => {
             </div>
           ))}
         </div>
+
+        {onCtaClick && (
+          <div className={`text-center mt-14 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+            <Button variant="hero" size="xl" onClick={onCtaClick}>
+              Quiero mi guía
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

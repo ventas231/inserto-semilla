@@ -15,8 +15,8 @@ const Index = () => {
   return (
     <main className="min-h-screen bg-background">
       <HeroSection onCtaClick={scrollToForm} />
-      <StorytellingSection />
-      <BenefitsSection />
+      <StorytellingSection onCtaClick={scrollToForm} />
+      <BenefitsSection onCtaClick={scrollToForm} />
       <MysterySection onCtaClick={scrollToForm} />
       <EmailForm formRef={formRef} />
 
