@@ -13,7 +13,7 @@ serve(async (req) => {
 
   try {
     const SHOPIFY_STORE_URL = Deno.env.get("SHOPIFY_STORE_URL");
-    const SHOPIFY_API_SECRET = Deno.env.get("SHOPIFY_API_SECRET");
+    const SHOPIFY_ACCESS_TOKEN = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
 
     if (!SHOPIFY_STORE_URL || !SHOPIFY_API_SECRET) {
       throw new Error("Shopify credentials not configured");
