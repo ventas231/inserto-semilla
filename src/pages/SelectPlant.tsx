@@ -14,10 +14,10 @@ const codeMap: Record<string, string> = {
 const codeSchema = z.string().trim().min(1, "Ingresa el código de tu papel semilla");
 
 const SelectPlant = () => {
-  const navigate = useNavigate();
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
