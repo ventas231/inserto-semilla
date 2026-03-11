@@ -40,10 +40,10 @@ const Index = () => {
             <Leaf className="w-5 h-5 text-primary" />
           </div>
           <p className="text-sm font-sans text-foreground font-medium mb-2">
-            Special Fit Socks
+            SpecialFit Socks
           </p>
           <p className="text-xs text-muted-foreground font-sans leading-relaxed max-w-sm mx-auto">
-            Esta experiencia fue creada por Special Fit Socks, una marca especializada en calcetines diseñados para brindar comodidad y bienestar a personas con diabetes.
+            Esta experiencia fue creada por SpecialFit Socks, una marca dedicada a diseñar calcetines pensados para la comodidad, el bienestar y el cuidado de tus pies en cada paso.
           </p>
         </div>
       </section>
