@@ -17,10 +17,9 @@ const Index = () => {
     <main className="min-h-screen bg-background">
       <HeroSection onCtaClick={scrollToForm} />
 
-      {/* Soft divider */}
       <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
 
-      <StorytellingSection />
+      <StorytellingSection onStepClick={scrollToForm} />
 
       <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
@@ -44,7 +43,7 @@ const Index = () => {
             Special Fit Socks
           </p>
           <p className="text-xs text-muted-foreground font-sans leading-relaxed max-w-sm mx-auto">
-            Esta experiencia fue creada por Special Fit Socks, una marca dedicada a cuidar tus pasos con calcetines especializados diseñados para la comodidad y bienestar de personas con diabetes.
+            Esta experiencia fue creada por Special Fit Socks, una marca especializada en calcetines diseñados para brindar comodidad y bienestar a personas con diabetes.
           </p>
         </div>
       </section>

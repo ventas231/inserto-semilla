@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sprout, Leaf, Flower2 } from "lucide-react";
+import PlantCarousel from "@/components/PlantCarousel";
 
 interface MysterySectionProps {
   onCtaClick: () => void;
@@ -36,32 +37,17 @@ const MysterySection = ({ onCtaClick }: MysterySectionProps) => {
           El misterio
         </p>
 
-        <h2 className="text-3xl sm:text-4xl font-serif text-foreground mb-6">
-          Dentro de tu papel semilla hay una pequeña sorpresa de la naturaleza
+        <h2 className="text-3xl sm:text-4xl font-serif text-foreground mb-4">
+          Cada papel semilla guarda una pequeña sorpresa de la naturaleza
         </h2>
 
-        <p className="text-base text-muted-foreground font-sans leading-relaxed mb-8 max-w-md mx-auto">
-          Cada semilla guarda una historia de crecimiento distinta.
-          <br />
+        <p className="text-base text-muted-foreground font-sans leading-relaxed mb-10 max-w-md mx-auto">
           <strong className="text-foreground">Ingresa tu código para descubrir qué plantita comenzó su camino contigo.</strong>
         </p>
 
-        {/* Mystery cards */}
-        <div className="flex justify-center gap-4 mb-10">
-          {[0, 1, 2, 3, 4].map((i) => (
-            <div
-              key={i}
-              className={`group w-14 h-18 sm:w-20 sm:h-24 rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm flex flex-col items-center justify-center gap-1 transition-all duration-700 hover:shadow-md hover:border-primary/30 ${
-                isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-95'
-              }`}
-              style={{ transitionDelay: `${300 + i * 100}ms` }}
-            >
-              <Sprout className="w-4 h-4 text-primary/50 group-hover:text-primary transition-colors duration-300" />
-              <span className="text-xl font-serif text-primary/40 group-hover:text-primary transition-colors duration-500" style={{ animation: 'gentlePulse 3s ease-in-out infinite', animationDelay: `${i * 0.4}s` }}>
-                ?
-              </span>
-            </div>
-          ))}
+        {/* 3D Carousel */}
+        <div className="mb-10">
+          <PlantCarousel />
         </div>
 
         <Button variant="hero" size="xl" onClick={onCtaClick} className="group">
