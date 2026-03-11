@@ -67,6 +67,24 @@ const SelectPlant = () => {
     }
   };
 
+  if (success) {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center px-6 relative overflow-hidden">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-48 h-48 bg-accent/20 rounded-full blur-3xl" />
+        <div className="max-w-md w-full text-center py-20 relative z-10 animate-fade-up">
+          <p className="text-5xl mb-6">🌿</p>
+          <h1 className="text-3xl sm:text-4xl font-serif text-foreground mb-4 leading-tight">
+            ¡Registro exitoso!
+          </h1>
+          <p className="text-base text-muted-foreground font-sans leading-relaxed">
+            Hemos recibido tu información. Por favor, revisa tu correo electrónico ahora mismo; ahí encontrarás todos los detalles sobre tu plantita y lo que prometimos.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-background flex items-center justify-center px-6 relative overflow-hidden">
       <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
