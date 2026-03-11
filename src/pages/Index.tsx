@@ -44,7 +44,7 @@ const Index = () => {
             Special Fit Socks
           </p>
           <p className="text-xs text-muted-foreground font-sans leading-relaxed max-w-sm mx-auto">
-            Esta experiencia fue creada por Special Fit Socks, una marca especializada en calcetines diseñados para cuidar tus pies con comodidad y bienestar.
+            Esta experiencia fue creada por Special Fit Socks, una marca dedicada a cuidar tus pasos con calcetines especializados diseñados para la comodidad y bienestar de personas con diabetes.
           </p>
         </div>
       </section>

@@ -9,7 +9,7 @@ const steps = [
     icon: Sprout,
     number: "01",
     title: "Prepara tu papel semilla",
-    description: "Tu papel contiene semillas reales listas para germinar. Solo necesitas tierra, agua y un poco de sol.",
+    description: "Tu papel contiene semillas reales listas para germinar.",
     image: plantingTools,
     alt: "Herramientas y materiales para plantar",
   },
