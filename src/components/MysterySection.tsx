@@ -36,33 +36,33 @@ const MysterySection = ({ onCtaClick }: MysterySectionProps) => {
           El misterio
         </p>
 
-        <h2 className="text-3xl sm:text-4xl font-serif text-foreground mb-8">
-          Una de estas está creciendo para ti…
+        <h2 className="text-3xl sm:text-4xl font-serif text-foreground mb-6">
+          Dentro de tu papel semilla hay una pequeña sorpresa de la naturaleza
         </h2>
+
+        <p className="text-base text-muted-foreground font-sans leading-relaxed mb-8 max-w-md mx-auto">
+          Cada semilla guarda una historia de crecimiento distinta.
+          <br />
+          <strong className="text-foreground">Ingresa tu código para descubrir qué plantita comenzó su camino contigo.</strong>
+        </p>
 
         {/* Mystery cards */}
         <div className="flex justify-center gap-4 mb-10">
-          {[0, 1, 2].map((i) => (
+          {[0, 1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className={`group w-20 h-24 sm:w-24 sm:h-28 rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm flex flex-col items-center justify-center gap-1 transition-all duration-700 hover:shadow-md hover:border-primary/30 ${
+              className={`group w-14 h-18 sm:w-20 sm:h-24 rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm flex flex-col items-center justify-center gap-1 transition-all duration-700 hover:shadow-md hover:border-primary/30 ${
                 isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-95'
               }`}
-              style={{ transitionDelay: `${300 + i * 120}ms` }}
+              style={{ transitionDelay: `${300 + i * 100}ms` }}
             >
-              <Sprout className="w-5 h-5 text-primary/50 group-hover:text-primary transition-colors duration-300" />
-              <span className="text-2xl font-serif text-primary/40 group-hover:text-primary transition-colors duration-500" style={{ animation: 'gentlePulse 3s ease-in-out infinite', animationDelay: `${i * 0.5}s` }}>
+              <Sprout className="w-4 h-4 text-primary/50 group-hover:text-primary transition-colors duration-300" />
+              <span className="text-xl font-serif text-primary/40 group-hover:text-primary transition-colors duration-500" style={{ animation: 'gentlePulse 3s ease-in-out infinite', animationDelay: `${i * 0.4}s` }}>
                 ?
               </span>
             </div>
           ))}
         </div>
-
-        <p className="text-base text-muted-foreground font-sans leading-relaxed mb-8">
-          Cada papel semilla guarda una sorpresa distinta.
-          <br />
-          <strong className="text-foreground">Descubre cuál te tocó.</strong>
-        </p>
 
         <Button variant="hero" size="xl" onClick={onCtaClick} className="group">
           <Sprout className="w-5 h-5 mr-1 group-hover:scale-110 transition-transform" />
