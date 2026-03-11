@@ -50,12 +50,13 @@ const BenefitsSection = ({ onCtaClick }: BenefitsSectionProps) => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24 sm:py-32 px-6 bg-background relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-72 h-72 bg-accent/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+    <section ref={sectionRef} className="py-16 sm:py-20 px-6 bg-background relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+      <div className="absolute bottom-0 left-0 w-36 h-36 bg-accent/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3" />
 
       <div className="max-w-4xl mx-auto relative z-10">
-        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-          <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">
+        <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+          <p className="text-sm tracking-[0.25em] uppercase text-primary mb-3 font-sans font-medium">
             Lo que recibirás
           </p>
           <h2 className="text-3xl sm:text-4xl font-serif text-foreground">
@@ -63,26 +64,26 @@ const BenefitsSection = ({ onCtaClick }: BenefitsSectionProps) => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {benefits.map((benefit, index) => (
             <div
               key={benefit.title}
-              className={`p-8 rounded-xl bg-card border border-border/50 text-center transition-all duration-700 hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 ${
+              className={`group p-5 rounded-xl bg-card/80 border border-border/40 text-center transition-all duration-500 hover:shadow-md hover:-translate-y-1 hover:border-primary/30 hover:bg-card ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
               }`}
-              style={{ transitionDelay: isVisible ? `${index * 100}ms` : '0ms' }}
+              style={{ transitionDelay: isVisible ? `${index * 80}ms` : '0ms' }}
             >
-              <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center mx-auto mb-5">
-                <benefit.icon className="w-5 h-5 text-accent-foreground" />
+              <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/15 transition-colors">
+                <benefit.icon className="w-4 h-4 text-primary" />
               </div>
-              <h3 className="font-serif text-lg mb-2 text-foreground">{benefit.title}</h3>
-              <p className="text-sm text-muted-foreground font-sans leading-relaxed">{benefit.description}</p>
+              <h3 className="font-serif text-sm mb-1 text-foreground">{benefit.title}</h3>
+              <p className="text-xs text-muted-foreground font-sans leading-relaxed">{benefit.description}</p>
             </div>
           ))}
         </div>
 
         {onCtaClick && (
-          <div className={`text-center mt-14 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+          <div className={`text-center mt-10 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
             <Button variant="hero" size="xl" onClick={onCtaClick}>
               Quiero mi guía
             </Button>

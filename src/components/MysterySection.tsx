@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Sprout } from "lucide-react";
+import { Sprout, Leaf, Flower2 } from "lucide-react";
 
 interface MysterySectionProps {
   onCtaClick: () => void;
@@ -22,40 +22,50 @@ const MysterySection = ({ onCtaClick }: MysterySectionProps) => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24 sm:py-32 px-6 bg-secondary/40 relative overflow-hidden">
-      {/* Decorative background circles */}
-      <div className="absolute top-10 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-10 right-10 w-48 h-48 bg-accent/30 rounded-full blur-3xl" />
+    <section ref={sectionRef} className="py-16 sm:py-20 px-6 bg-gradient-to-b from-secondary/40 to-primary/[0.06] relative overflow-hidden">
+      {/* Floating nature accents */}
+      <div className="absolute top-8 left-8 text-primary/10">
+        <Leaf className="w-20 h-20 -rotate-12" />
+      </div>
+      <div className="absolute bottom-8 right-12 text-primary/10">
+        <Flower2 className="w-16 h-16 rotate-12" />
+      </div>
 
-      <div className={`max-w-2xl mx-auto text-center relative z-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-        <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-6 font-sans">
+      <div className={`max-w-lg mx-auto text-center relative z-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <p className="text-sm tracking-[0.25em] uppercase text-primary mb-4 font-sans font-medium">
           El misterio
         </p>
 
-        <h2 className="text-3xl sm:text-4xl font-serif text-foreground mb-12">
+        <h2 className="text-3xl sm:text-4xl font-serif text-foreground mb-8">
           Una de estas está creciendo para ti…
         </h2>
 
-        {/* Single mystery card */}
-        <div
-          className={`mx-auto max-w-[200px] group rounded-2xl border border-border/60 bg-background/80 backdrop-blur-sm p-10 flex flex-col items-center gap-4 transition-all duration-700 hover:shadow-lg hover:border-primary/30 ${
-            isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-95'
-          }`}
-          style={{ transitionDelay: '400ms' }}
-        >
-          <Sprout className="w-8 h-8 text-primary/70 group-hover:text-primary transition-colors duration-300" />
-          <span className="text-5xl font-serif text-primary/50 group-hover:text-primary transition-colors duration-500" style={{ animation: 'gentlePulse 3s ease-in-out infinite' }}>
-            ?
-          </span>
+        {/* Mystery cards */}
+        <div className="flex justify-center gap-4 mb-10">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className={`group w-20 h-24 sm:w-24 sm:h-28 rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm flex flex-col items-center justify-center gap-1 transition-all duration-700 hover:shadow-md hover:border-primary/30 ${
+                isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-95'
+              }`}
+              style={{ transitionDelay: `${300 + i * 120}ms` }}
+            >
+              <Sprout className="w-5 h-5 text-primary/50 group-hover:text-primary transition-colors duration-300" />
+              <span className="text-2xl font-serif text-primary/40 group-hover:text-primary transition-colors duration-500" style={{ animation: 'gentlePulse 3s ease-in-out infinite', animationDelay: `${i * 0.5}s` }}>
+                ?
+              </span>
+            </div>
+          ))}
         </div>
 
-        <p className="text-base sm:text-lg text-foreground/80 font-sans leading-relaxed mt-12 mb-10">
+        <p className="text-base text-muted-foreground font-sans leading-relaxed mb-8">
           Cada papel semilla guarda una sorpresa distinta.
           <br />
-          Descubre cuál te tocó.
+          <strong className="text-foreground">Descubre cuál te tocó.</strong>
         </p>
 
-        <Button variant="hero" size="xl" onClick={onCtaClick}>
+        <Button variant="hero" size="xl" onClick={onCtaClick} className="group">
+          <Sprout className="w-5 h-5 mr-1 group-hover:scale-110 transition-transform" />
           Descubrir mi planta
         </Button>
       </div>
