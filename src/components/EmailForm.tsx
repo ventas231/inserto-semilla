@@ -43,6 +43,9 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
 
     setIsSubmitting(true);
 
+    // Store email in sessionStorage for the next step
+    sessionStorage.setItem("user_email", result.data);
+
     setTimeout(() => {
       navigate("/seleccionar");
     }, 800);

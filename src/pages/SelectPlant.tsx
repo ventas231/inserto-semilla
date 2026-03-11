@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/sonner";
 
 const codeMap: Record<string, string> = {
   "00756": "manzanilla",
@@ -17,7 +19,7 @@ const SelectPlant = () => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -34,9 +36,44 @@ const SelectPlant = () => {
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      navigate(`/revelacion/${plant}`);
-    }, 600);
+
+    // Get email from sessionStorage
+    const email = sessionStorage.getItem("user_email");
+    if (!email) {
+      setError("No se encontró tu correo. Regresa e ingresa tu email.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("shopify-customer", {
+        body: { email, code: result.data },
+      });
+
+      if (fnError) {
+        throw new Error(fnError.message || "Error al conectar con Shopify");
+      }
+
+      if (!data?.success) {
+        throw new Error(data?.error || "Error al guardar en Shopify");
+      }
+
+      toast("¡Éxito!", {
+        description: "Tu información se guardó correctamente.",
+      });
+
+      // Clean up
+      sessionStorage.removeItem("user_email");
+
+      setTimeout(() => {
+        navigate(`/revelacion/${plant}`);
+      }, 1200);
+    } catch (err: unknown) {
+      console.error("Shopify error:", err);
+      const msg = err instanceof Error ? err.message : "Error inesperado";
+      setError(msg);
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -80,7 +117,7 @@ const SelectPlant = () => {
             className="w-full"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Revelando..." : "Revelar mi planta"}
+            {isSubmitting ? "Guardando..." : "Revelar mi planta"}
           </Button>
         </form>
       </div>
