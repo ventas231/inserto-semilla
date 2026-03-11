@@ -47,7 +47,7 @@ const MysterySection = ({ onCtaClick }: MysterySectionProps) => {
 
         {/* 3D Carousel */}
         <div className="mb-10">
-          <PlantCarousel />
+          <PlantCarousel onCardClick={onCtaClick} />
         </div>
 
         <Button variant="hero" size="xl" onClick={onCtaClick} className="group">
