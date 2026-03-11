@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/components/ui/sonner";
 
 const codeMap: Record<string, string> = {
   "00756": "manzanilla",
