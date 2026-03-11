@@ -33,7 +33,7 @@ serve(async (req) => {
     const apiBase = `https://${baseUrl}/admin/api/2024-01`;
     const headers = {
       "Content-Type": "application/json",
-      "X-Shopify-Access-Token": SHOPIFY_API_SECRET,
+      "X-Shopify-Access-Token": SHOPIFY_ACCESS_TOKEN,
     };
 
     // Search for existing customer

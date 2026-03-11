@@ -58,16 +58,9 @@ const SelectPlant = () => {
         throw new Error(data?.error || "Error al guardar en Shopify");
       }
 
-      toast("¡Éxito!", {
-        description: "Tu información se guardó correctamente.",
-      });
-
-      // Clean up
       sessionStorage.removeItem("user_email");
-
-      setTimeout(() => {
-        navigate(`/revelacion/${plant}`);
-      }, 1200);
+      setSuccess(true);
+      setIsSubmitting(false);
     } catch (err: unknown) {
       console.error("Shopify error:", err);
       const msg = err instanceof Error ? err.message : "Error inesperado";
