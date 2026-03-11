@@ -31,7 +31,11 @@ const steps = [
   },
 ];
 
-const StorytellingSection = () => {
+interface StorytellingSectionProps {
+  onStepClick?: () => void;
+}
+
+const StorytellingSection = ({ onStepClick }: StorytellingSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -48,7 +52,6 @@ const StorytellingSection = () => {
 
   return (
     <section ref={sectionRef} className="py-16 sm:py-20 px-6 bg-secondary/30 relative overflow-hidden">
-      {/* Subtle texture overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent" />
 
       <div className="max-w-5xl mx-auto relative z-10">
@@ -65,7 +68,11 @@ const StorytellingSection = () => {
           {steps.map((step, index) => (
             <div
               key={step.number}
-              className={`group grid grid-cols-1 md:grid-cols-2 gap-6 items-center rounded-2xl bg-card/60 backdrop-blur-sm border border-border/40 p-5 sm:p-8 transition-all duration-700 hover:shadow-lg hover:border-primary/20 ${
+              onClick={onStepClick}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onStepClick?.(); }}
+              className={`group grid grid-cols-1 md:grid-cols-2 gap-6 items-center rounded-2xl bg-card/60 backdrop-blur-sm border border-border/40 p-5 sm:p-8 transition-all duration-700 hover:shadow-lg hover:border-primary/20 cursor-pointer ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               } ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
               style={{ transitionDelay: `${index * 150}ms` }}

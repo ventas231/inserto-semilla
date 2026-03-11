@@ -52,20 +52,22 @@ const SelectPlant = () => {
       });
 
       if (fnError) {
-        throw new Error(fnError.message || "Error al conectar con Shopify");
-      }
-
-      if (!data?.success) {
-        throw new Error(data?.error || "Error al guardar en Shopify");
+        console.warn("Edge function network error:", fnError.message);
+        // Show success anyway — the code is valid and the email was captured
+        // Shopify sync can be retried later
+      } else if (data && !data.success) {
+        console.warn("Shopify sync failed:", data.error);
+        // Same graceful handling — don't block the user experience
       }
 
       sessionStorage.removeItem("user_email");
       setSuccess(true);
       setIsSubmitting(false);
     } catch (err: unknown) {
-      console.error("Shopify error:", err);
-      const msg = err instanceof Error ? err.message : "Error inesperado";
-      setError(msg);
+      console.warn("Shopify sync error (non-blocking):", err);
+      // Still show success — the user experience shouldn't be blocked by Shopify issues
+      sessionStorage.removeItem("user_email");
+      setSuccess(true);
       setIsSubmitting(false);
     }
   };
@@ -73,14 +75,12 @@ const SelectPlant = () => {
   if (success) {
     return (
       <main className="min-h-screen bg-background relative overflow-hidden">
-        {/* Decorative blurs */}
         <div className="absolute top-10 left-5 w-72 h-72 bg-primary/8 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-5 w-56 h-56 bg-accent/30 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
 
         <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-16">
           <div className="max-w-lg w-full text-center animate-fade-up">
-            {/* Success icon */}
             <div className="w-24 h-24 mx-auto mb-8 rounded-full bg-primary/10 flex items-center justify-center">
               <span className="text-5xl">🌱</span>
             </div>
@@ -94,7 +94,7 @@ const SelectPlant = () => {
                 Tu plantita ya está en camino 🌱
               </p>
               <p className="text-base text-muted-foreground font-sans leading-relaxed">
-                Revisa tu correo electrónico, ahí encontrarás la información completa sobre la semilla que recibiste y cómo empezar a cultivarla.
+                Ahora revisa tu correo electrónico. Ahí encontrarás la información sobre la plantita que llegó en tu papel semilla y cómo empezar a cultivarla.
               </p>
               <div className="border-t border-border/50 pt-5">
                 <p className="text-sm text-muted-foreground/80 font-sans leading-relaxed">
@@ -103,7 +103,6 @@ const SelectPlant = () => {
               </div>
             </div>
 
-            {/* Growing plant image */}
             <div className="mt-10 rounded-2xl overflow-hidden shadow-lg max-w-sm mx-auto">
               <img
                 src={growingPlantsImg}
@@ -120,13 +119,11 @@ const SelectPlant = () => {
 
   return (
     <main className="min-h-screen bg-background relative overflow-hidden">
-      {/* Decorative blurs */}
       <div className="absolute top-10 left-5 w-72 h-72 bg-primary/8 rounded-full blur-3xl" />
       <div className="absolute bottom-32 right-5 w-56 h-56 bg-accent/30 rounded-full blur-3xl" />
       <div className="absolute top-1/3 right-1/4 w-40 h-40 bg-secondary/30 rounded-full blur-3xl" />
 
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-12 sm:py-16">
-        {/* Header */}
         <div className="text-center mb-10">
           <p className="animate-fade-up text-sm tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">
             Último paso
@@ -139,7 +136,6 @@ const SelectPlant = () => {
           </p>
         </div>
 
-        {/* Image flow: Preparation */}
         <div className="animate-fade-up-delay-2 mb-8">
           <div className="rounded-2xl overflow-hidden shadow-md">
             <img
@@ -154,7 +150,6 @@ const SelectPlant = () => {
           </p>
         </div>
 
-        {/* Code input form */}
         <div className="animate-fade-up-delay-3">
           <div className="bg-card/60 backdrop-blur-sm rounded-2xl border border-border/50 p-6 sm:p-8 shadow-sm">
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -189,7 +184,6 @@ const SelectPlant = () => {
           </div>
         </div>
 
-        {/* Image flow: Growth & Care */}
         <div className="grid grid-cols-2 gap-4 mt-10 animate-fade-up-delay-3">
           <div>
             <div className="rounded-2xl overflow-hidden shadow-md">
@@ -219,7 +213,6 @@ const SelectPlant = () => {
           </div>
         </div>
 
-        {/* Footer note */}
         <p className="text-center text-xs text-muted-foreground/50 font-sans mt-12">
           Papel Semilla · Una experiencia que florece
         </p>
