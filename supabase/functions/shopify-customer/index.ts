@@ -13,9 +13,9 @@ serve(async (req) => {
 
   try {
     const SHOPIFY_STORE_URL = Deno.env.get("SHOPIFY_STORE_URL");
-    const SHOPIFY_API_SECRET = Deno.env.get("SHOPIFY_API_SECRET");
+    const SHOPIFY_ACCESS_TOKEN = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
 
-    if (!SHOPIFY_STORE_URL || !SHOPIFY_API_SECRET) {
+    if (!SHOPIFY_STORE_URL || !SHOPIFY_ACCESS_TOKEN) {
       throw new Error("Shopify credentials not configured");
     }
 
@@ -33,7 +33,7 @@ serve(async (req) => {
     const apiBase = `https://${baseUrl}/admin/api/2024-01`;
     const headers = {
       "Content-Type": "application/json",
-      "X-Shopify-Access-Token": SHOPIFY_API_SECRET,
+      "X-Shopify-Access-Token": SHOPIFY_ACCESS_TOKEN,
     };
 
     // Search for existing customer

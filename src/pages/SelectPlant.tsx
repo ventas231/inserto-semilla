@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/components/ui/sonner";
 
 const codeMap: Record<string, string> = {
   "00756": "manzanilla",
@@ -14,10 +12,10 @@ const codeMap: Record<string, string> = {
 const codeSchema = z.string().trim().min(1, "Ingresa el código de tu papel semilla");
 
 const SelectPlant = () => {
-  const navigate = useNavigate();
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,16 +56,9 @@ const SelectPlant = () => {
         throw new Error(data?.error || "Error al guardar en Shopify");
       }
 
-      toast("¡Éxito!", {
-        description: "Tu información se guardó correctamente.",
-      });
-
-      // Clean up
       sessionStorage.removeItem("user_email");
-
-      setTimeout(() => {
-        navigate(`/revelacion/${plant}`);
-      }, 1200);
+      setSuccess(true);
+      setIsSubmitting(false);
     } catch (err: unknown) {
       console.error("Shopify error:", err);
       const msg = err instanceof Error ? err.message : "Error inesperado";
@@ -75,6 +66,24 @@ const SelectPlant = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (success) {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center px-6 relative overflow-hidden">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-48 h-48 bg-accent/20 rounded-full blur-3xl" />
+        <div className="max-w-md w-full text-center py-20 relative z-10 animate-fade-up">
+          <p className="text-5xl mb-6">🌿</p>
+          <h1 className="text-3xl sm:text-4xl font-serif text-foreground mb-4 leading-tight">
+            ¡Registro exitoso!
+          </h1>
+          <p className="text-base text-muted-foreground font-sans leading-relaxed">
+            Hemos recibido tu información. Por favor, revisa tu correo electrónico ahora mismo; ahí encontrarás todos los detalles sobre tu plantita y lo que prometimos.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-background flex items-center justify-center px-6 relative overflow-hidden">
