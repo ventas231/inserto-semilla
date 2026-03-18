@@ -31,13 +31,23 @@ async function getAccessToken(storeUrl: string): Promise<string> {
     .eq("shop_domain", storeUrl)
     .maybeSingle();
 
-  if (error || !data?.access_token) {
-    console.error("[TOKEN] No token found in database for:", storeUrl);
-    throw new Error("No Shopify access token found. Please authorize the app first via /shopify-oauth?action=start");
+  if (data?.access_token) {
+    console.log("[TOKEN] Retrieved access token from database");
+    return data.access_token;
   }
 
-  console.log("[TOKEN] Retrieved access token from database");
-  return data.access_token;
+  if (error) {
+    console.warn("[TOKEN] DB lookup error:", error.message);
+  }
+
+  // Fallback to environment secret
+  const envToken = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
+  if (envToken) {
+    console.log("[TOKEN] Using SHOPIFY_ACCESS_TOKEN from environment");
+    return envToken;
+  }
+
+  throw new Error("No Shopify access token found in database or environment");
 }
 
 serve(async (req) => {
