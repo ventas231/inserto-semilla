@@ -7,6 +7,18 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+function normalizeShopDomain(raw: string): string {
+  let s = raw.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  const adminMatch = s.match(/admin\.shopify\.com\/store\/([^\/]+)/);
+  if (adminMatch) {
+    s = `${adminMatch[1]}.myshopify.com`;
+  }
+  if (!s.includes(".myshopify.com")) {
+    s = `${s}.myshopify.com`;
+  }
+  return s;
+}
+
 async function getAccessToken(storeUrl: string): Promise<string> {
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
   const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -49,7 +61,7 @@ serve(async (req) => {
       );
     }
 
-    const storeUrl = SHOPIFY_STORE_URL.replace(/^https?:\/\//, "").replace(/\/$/, "");
+    const storeUrl = normalizeShopDomain(SHOPIFY_STORE_URL);
 
     // Get access token from database
     let accessToken: string;
