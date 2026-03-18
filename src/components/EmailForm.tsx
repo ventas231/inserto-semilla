@@ -1,10 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { Leaf, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const emailSchema = z.string().trim().email("Por favor ingresa un correo válido").max(255);
+const formSchema = z.object({
+  email: z.string().trim().email("Por favor ingresa un correo válido").max(255),
+  firstName: z.string().trim().max(100).optional(),
+  code: z.string().trim().min(1, "Ingresa el código de tu papel semilla"),
+  acceptsMarketing: z.boolean(),
+});
 
 interface EmailFormProps {
   formRef?: React.RefObject<HTMLDivElement>;
@@ -12,11 +17,15 @@ interface EmailFormProps {
 
 const EmailForm = ({ formRef }: EmailFormProps) => {
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [code, setCode] = useState("");
+  const [acceptsMarketing, setAcceptsMarketing] = useState(true);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [resultMessage, setResultMessage] = useState("");
+  const [resultType, setResultType] = useState<"success" | "error" | "">("");
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const navigate = useNavigate();
 
   const ref = formRef || sectionRef;
 
@@ -32,23 +41,67 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
     return () => observer.disconnect();
   }, [ref]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setResultMessage("");
+    setResultType("");
 
-    const result = emailSchema.safeParse(email);
+    const result = formSchema.safeParse({ email, firstName: firstName || undefined, code, acceptsMarketing });
     if (!result.success) {
       setError(result.error.errors[0].message);
       return;
     }
 
     setIsSubmitting(true);
-    sessionStorage.setItem("user_email", result.data);
 
-    setTimeout(() => {
-      navigate("/seleccionar");
-    }, 800);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("shopify-customer", {
+        body: {
+          email: result.data.email,
+          firstName: result.data.firstName,
+          code: result.data.code,
+          acceptsMarketing: result.data.acceptsMarketing,
+        },
+      });
+
+      if (fnError) {
+        console.error("Edge function error:", fnError);
+        setResultMessage("No se pudo guardar. Intenta de nuevo.");
+        setResultType("error");
+      } else if (data?.success) {
+        setResultMessage(data.message);
+        setResultType("success");
+      } else {
+        setResultMessage(data?.message || "No se pudo guardar. Intenta de nuevo.");
+        setResultType("error");
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
+      setResultMessage("No se pudo guardar. Intenta de nuevo.");
+      setResultType("error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (resultType === "success") {
+    return (
+      <section ref={ref} className="py-16 sm:py-20 px-6 bg-gradient-to-b from-background to-secondary/20">
+        <div className="max-w-md mx-auto">
+          <div className="bg-card/80 backdrop-blur-sm border border-border/40 rounded-2xl p-8 sm:p-10 shadow-sm text-center">
+            <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-5">
+              <span className="text-3xl">🌱</span>
+            </div>
+            <h2 className="text-2xl font-serif text-foreground mb-3">{resultMessage}</h2>
+            <p className="text-sm text-muted-foreground font-sans">
+              Revisa tu correo electrónico para más información sobre tu plantita.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={ref} className="py-16 sm:py-20 px-6 bg-gradient-to-b from-background to-secondary/20">
@@ -67,20 +120,55 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => { setEmail(e.target.value); setError(""); }}
+              placeholder="tu@correo.com"
+              className="w-full h-13 px-5 rounded-xl border border-border bg-background text-foreground font-sans text-base placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all duration-300"
+              required
+              maxLength={255}
+            />
+
+            <input
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="Tu nombre (opcional)"
+              className="w-full h-13 px-5 rounded-xl border border-border bg-background text-foreground font-sans text-base placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all duration-300"
+              maxLength={100}
+            />
+
+            <input
+              type="text"
+              inputMode="numeric"
+              value={code}
+              onChange={(e) => { setCode(e.target.value); setError(""); }}
+              placeholder="Código del papel semilla (ej: 000756)"
+              className="w-full h-13 px-5 rounded-xl border border-border bg-background text-foreground font-sans text-base placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all duration-300"
+              maxLength={10}
+              required
+            />
+
+            <label className="flex items-center gap-3 cursor-pointer">
               <input
-                type="email"
-                value={email}
-                onChange={(e) => { setEmail(e.target.value); setError(""); }}
-                placeholder="tu@correo.com"
-                className="w-full h-13 px-5 rounded-xl border border-border bg-background text-foreground font-sans text-base placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all duration-300"
-                required
-                maxLength={255}
+                type="checkbox"
+                checked={acceptsMarketing}
+                onChange={(e) => setAcceptsMarketing(e.target.checked)}
+                className="w-4 h-4 rounded border-border text-primary focus:ring-primary/30"
               />
-              {error && (
-                <p className="mt-2 text-sm text-destructive font-sans">{error}</p>
-              )}
-            </div>
+              <span className="text-sm text-muted-foreground font-sans">
+                Acepto recibir correos con tips de cuidado 🌿
+              </span>
+            </label>
+
+            {error && (
+              <p className="text-sm text-destructive font-sans">{error}</p>
+            )}
+
+            {resultType === "error" && resultMessage && (
+              <p className="text-sm text-destructive font-sans">{resultMessage}</p>
+            )}
 
             <Button
               type="submit"
@@ -90,7 +178,7 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
               disabled={isSubmitting}
             >
               <Leaf className="w-4 h-4 mr-1 group-hover:scale-110 transition-transform" />
-              {isSubmitting ? "Desbloqueando..." : "Desbloquear mi guía"}
+              {isSubmitting ? "Guardando..." : "Desbloquear mi guía"}
             </Button>
           </form>
 
