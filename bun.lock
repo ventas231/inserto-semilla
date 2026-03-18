@@ -35,6 +35,7 @@
         "@radix-ui/react-tooltip": "^1.2.7",
         "@rolldown/pluginutils": "^1.0.0-rc.9",
         "@supabase/supabase-js": "^2.99.1",
+        "@swc/core": "^1.15.18",
         "@tanstack/react-query": "^5.83.0",
         "@vitejs/plugin-react-swc": "3.11.0",
         "class-variance-authority": "^0.7.1",
