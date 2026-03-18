@@ -61,7 +61,7 @@ serve(async (req) => {
       );
     }
 
-    const storeUrl = SHOPIFY_STORE_URL.replace(/^https?:\/\//, "").replace(/\/$/, "");
+    const storeUrl = normalizeShopDomain(SHOPIFY_STORE_URL);
 
     // Get access token from database
     let accessToken: string;
