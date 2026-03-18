@@ -131,10 +131,14 @@ serve(async (req) => {
         .eq("shop_domain", storeUrl)
         .maybeSingle();
 
+      const hasDbToken = !!data && !dbError;
+      const hasEnvToken = !!Deno.env.get("SHOPIFY_ACCESS_TOKEN");
+
       return new Response(
         JSON.stringify({
-          connected: !!data && !dbError,
-          shop: data?.shop_domain,
+          connected: hasDbToken || hasEnvToken,
+          source: hasDbToken ? "database" : hasEnvToken ? "environment" : "none",
+          shop: data?.shop_domain || storeUrl,
           scopes: data?.scopes,
           updatedAt: data?.updated_at,
         }),
