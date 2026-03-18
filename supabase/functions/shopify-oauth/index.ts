@@ -40,11 +40,11 @@ serve(async (req) => {
     const storeUrl = normalizeShopDomain(SHOPIFY_STORE_URL);
     console.log("[OAUTH] Normalized store domain:", storeUrl);
     const url = new URL(req.url);
-    const action = url.searchParams.get("action");
+    const action = url.searchParams.get("action") || url.searchParams.get("step");
 
     // Step 1: Generate authorization URL
     if (action === "start") {
-      const redirectUri = `${SUPABASE_URL}/functions/v1/shopify-oauth?action=callback`;
+      const redirectUri = `${SUPABASE_URL}/functions/v1/shopify-oauth?step=callback`;
       const scopes = "read_customers,write_customers";
       const nonce = crypto.randomUUID();
 
