@@ -40,11 +40,16 @@ serve(async (req) => {
     const storeUrl = normalizeShopDomain(SHOPIFY_STORE_URL);
     console.log("[OAUTH] Normalized store domain:", storeUrl);
     const url = new URL(req.url);
-    const action = url.searchParams.get("action") || url.searchParams.get("step");
+    const action = url.searchParams.get("action");
+    const code = url.searchParams.get("code");
+    const shop = url.searchParams.get("shop");
+    const hmac = url.searchParams.get("hmac");
+    const state = url.searchParams.get("state");
+    const isOAuthCallback = Boolean(code && shop && hmac && state);
 
     // Step 1: Generate authorization URL
     if (action === "start") {
-      const redirectUri = `${SUPABASE_URL}/functions/v1/shopify-oauth?step=callback`;
+      const redirectUri = `${SUPABASE_URL}/functions/v1/shopify-oauth`;
       const scopes = "read_customers,write_customers";
       const nonce = crypto.randomUUID();
 
@@ -53,21 +58,14 @@ serve(async (req) => {
       console.log("[OAUTH] Generated auth URL for store:", storeUrl);
 
       return new Response(
-        JSON.stringify({ success: true, authUrl }),
+        JSON.stringify({ success: true, authUrl, redirectUri }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Step 2: Handle OAuth callback
-    if (action === "callback") {
-      const code = url.searchParams.get("code");
-      const shop = url.searchParams.get("shop");
-
-      if (!code) {
-        return new Response("Missing authorization code", { status: 400 });
-      }
-
-      console.log(`[OAUTH] Exchanging code for token. Shop: ${shop || storeUrl}`);
+    // Step 2: Handle OAuth callback without callback params in redirect URI
+    if (isOAuthCallback) {
+      console.log(`[OAUTH] Exchanging code for token. Shop: ${shop}`);
 
       const tokenRes = await fetch(`https://${storeUrl}/admin/oauth/access_token`, {
         method: "POST",
@@ -102,7 +100,7 @@ serve(async (req) => {
           {
             shop_domain: storeUrl,
             access_token: accessToken,
-            scopes: scopes,
+            scopes,
             updated_at: new Date().toISOString(),
           },
           { onConflict: "shop_domain" }
@@ -115,7 +113,6 @@ serve(async (req) => {
 
       console.log("[OAUTH] Token stored successfully in database");
 
-      // Return success HTML page
       return new Response(
         `<!DOCTYPE html><html><body style="font-family:sans-serif;text-align:center;padding:60px">
         <h1>✅ Shopify conectado exitosamente</h1>
@@ -146,7 +143,7 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ error: "Invalid action. Use ?action=start, callback, or status" }),
+      JSON.stringify({ error: "Invalid request. Use ?action=start, ?action=status, or Shopify OAuth callback params." }),
       { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error: unknown) {
