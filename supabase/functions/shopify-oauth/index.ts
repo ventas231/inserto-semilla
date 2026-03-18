@@ -7,6 +7,20 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+function normalizeShopDomain(raw: string): string {
+  let s = raw.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  // Convert admin.shopify.com/store/HANDLE to HANDLE.myshopify.com
+  const adminMatch = s.match(/admin\.shopify\.com\/store\/([^\/]+)/);
+  if (adminMatch) {
+    s = `${adminMatch[1]}.myshopify.com`;
+  }
+  // Ensure .myshopify.com suffix
+  if (!s.includes(".myshopify.com")) {
+    s = `${s}.myshopify.com`;
+  }
+  return s;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -23,7 +37,8 @@ serve(async (req) => {
       throw new Error("Shopify credentials not configured");
     }
 
-    const storeUrl = SHOPIFY_STORE_URL.replace(/^https?:\/\//, "").replace(/\/$/, "");
+    const storeUrl = normalizeShopDomain(SHOPIFY_STORE_URL);
+    console.log("[OAUTH] Normalized store domain:", storeUrl);
     const url = new URL(req.url);
     const action = url.searchParams.get("action");
 
