@@ -22,7 +22,6 @@ function normalizeShopDomain(raw: string): string {
 async function getAccessToken(storeUrl: string): Promise<string> {
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
   const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
   const { data, error } = await supabase
@@ -35,12 +34,10 @@ async function getAccessToken(storeUrl: string): Promise<string> {
     console.log("[TOKEN] Retrieved access token from database");
     return data.access_token;
   }
-
   if (error) {
     console.warn("[TOKEN] DB lookup error:", error.message);
   }
 
-  // Fallback to environment secret
   const envToken = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
   if (envToken) {
     console.log("[TOKEN] Using SHOPIFY_ACCESS_TOKEN from environment");
@@ -57,23 +54,21 @@ serve(async (req) => {
 
   try {
     const SHOPIFY_STORE_URL = Deno.env.get("SHOPIFY_STORE_URL");
-
     if (!SHOPIFY_STORE_URL) {
       throw new Error("SHOPIFY_STORE_URL not configured");
     }
 
-    const { email, firstName, code, acceptsMarketing } = await req.json();
+    const { email, firstName, acceptsMarketing } = await req.json();
 
-    if (!email || !code) {
+    if (!email) {
       return new Response(
-        JSON.stringify({ error: "Email y código son requeridos" }),
+        JSON.stringify({ error: "Email es requerido" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const storeUrl = normalizeShopDomain(SHOPIFY_STORE_URL);
 
-    // Get access token from database
     let accessToken: string;
     try {
       accessToken = await getAccessToken(storeUrl);
@@ -93,7 +88,6 @@ serve(async (req) => {
 
     const tag = "landing_prelaunch";
 
-    // Search for existing customer
     console.log(`[CUSTOMER] Searching for customer: ${email}`);
     const searchRes = await fetch(
       `${apiBase}/customers/search.json?query=email:${encodeURIComponent(email)}`,
@@ -107,7 +101,6 @@ serve(async (req) => {
     }
 
     if (searchData.customers && searchData.customers.length > 0) {
-      // Update existing customer
       const customer = searchData.customers[0];
       console.log(`[CUSTOMER] Found existing customer: ${customer.id}`);
 
@@ -122,12 +115,6 @@ serve(async (req) => {
             state: acceptsMarketing ? "subscribed" : "not_subscribed",
             opt_in_level: "single_opt_in",
           },
-          metafields: [{
-            namespace: "custom",
-            key: "promo_code",
-            value: code,
-            type: "single_line_text_field",
-          }],
         },
       };
 
@@ -159,7 +146,6 @@ serve(async (req) => {
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     } else {
-      // Create new customer
       console.log("[CUSTOMER] Creating new customer...");
 
       const createBody: Record<string, unknown> = {
@@ -170,12 +156,6 @@ serve(async (req) => {
             state: acceptsMarketing ? "subscribed" : "not_subscribed",
             opt_in_level: "single_opt_in",
           },
-          metafields: [{
-            namespace: "custom",
-            key: "promo_code",
-            value: code,
-            type: "single_line_text_field",
-          }],
         },
       };
 
