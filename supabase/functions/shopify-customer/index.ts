@@ -1,51 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
-
-function normalizeShopDomain(raw: string): string {
-  let s = raw.replace(/^https?:\/\//, "").replace(/\/$/, "");
-  const adminMatch = s.match(/admin\.shopify\.com\/store\/([^\/]+)/);
-  if (adminMatch) {
-    s = `${adminMatch[1]}.myshopify.com`;
-  }
-  if (!s.includes(".myshopify.com")) {
-    s = `${s}.myshopify.com`;
-  }
-  return s;
-}
-
-async function getAccessToken(storeUrl: string): Promise<string> {
-  const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-  const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
-  const { data, error } = await supabase
-    .from("shopify_tokens")
-    .select("access_token")
-    .eq("shop_domain", storeUrl)
-    .maybeSingle();
-
-  if (data?.access_token) {
-    console.log("[TOKEN] Retrieved access token from database");
-    return data.access_token;
-  }
-  if (error) {
-    console.warn("[TOKEN] DB lookup error:", error.message);
-  }
-
-  const envToken = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
-  if (envToken) {
-    console.log("[TOKEN] Using SHOPIFY_ACCESS_TOKEN from environment");
-    return envToken;
-  }
-
-  throw new Error("No Shopify access token found in database or environment");
-}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -53,12 +11,12 @@ serve(async (req) => {
   }
 
   try {
-    const SHOPIFY_STORE_URL = Deno.env.get("SHOPIFY_STORE_URL");
-    if (!SHOPIFY_STORE_URL) {
-      throw new Error("SHOPIFY_STORE_URL not configured");
+    const accessToken = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
+    if (!accessToken) {
+      throw new Error("SHOPIFY_ACCESS_TOKEN not configured");
     }
 
-    const { email, firstName, acceptsMarketing } = await req.json();
+    const { email, firstName } = await req.json();
 
     if (!email) {
       return new Response(
@@ -67,125 +25,55 @@ serve(async (req) => {
       );
     }
 
-    const storeUrl = normalizeShopDomain(SHOPIFY_STORE_URL);
-
-    let accessToken: string;
-    try {
-      accessToken = await getAccessToken(storeUrl);
-    } catch (err) {
-      console.error("[TOKEN] Error:", err);
-      return new Response(
-        JSON.stringify({ success: false, message: "No se pudo guardar. Intenta de nuevo.", error: "Token not available" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const apiBase = `https://${storeUrl}/admin/api/2024-01`;
-    const headers = {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": accessToken,
+    const customerBody: Record<string, unknown> = {
+      customer: {
+        email,
+        tags: "recetario",
+        email_marketing_consent: {
+          state: "subscribed",
+          opt_in_level: "single_opt_in",
+        },
+      },
     };
 
-    const tag = "landing_prelaunch";
-
-    console.log(`[CUSTOMER] Searching for customer: ${email}`);
-    const searchRes = await fetch(
-      `${apiBase}/customers/search.json?query=email:${encodeURIComponent(email)}`,
-      { headers }
-    );
-    const searchData = await searchRes.json();
-
-    if (!searchRes.ok) {
-      console.error(`[CUSTOMER] Search failed [${searchRes.status}]: ${JSON.stringify(searchData)}`);
-      throw new Error(`Shopify search failed [${searchRes.status}]`);
+    if (firstName) {
+      (customerBody.customer as Record<string, unknown>).first_name = firstName;
     }
 
-    if (searchData.customers && searchData.customers.length > 0) {
-      const customer = searchData.customers[0];
-      console.log(`[CUSTOMER] Found existing customer: ${customer.id}`);
-
-      const existingTags = customer.tags ? customer.tags.split(", ") : [];
-      if (!existingTags.includes(tag)) existingTags.push(tag);
-
-      const updateBody: Record<string, unknown> = {
-        customer: {
-          id: customer.id,
-          tags: existingTags.join(", "),
-          email_marketing_consent: {
-            state: acceptsMarketing ? "subscribed" : "not_subscribed",
-            opt_in_level: "single_opt_in",
-          },
-        },
-      };
-
-      if (firstName) {
-        (updateBody.customer as Record<string, unknown>).first_name = firstName;
-      }
-
-      console.log(`[CUSTOMER] Updating customer ${customer.id}...`);
-      const updateRes = await fetch(`${apiBase}/customers/${customer.id}.json`, {
-        method: "PUT",
-        headers,
-        body: JSON.stringify(updateBody),
-      });
-      const updateData = await updateRes.json();
-
-      if (!updateRes.ok) {
-        console.error(`[CUSTOMER] Update failed [${updateRes.status}]: ${JSON.stringify(updateData)}`);
-        throw new Error(`Shopify update failed [${updateRes.status}]`);
-      }
-
-      console.log(`[CUSTOMER] Customer ${customer.id} updated`);
-      return new Response(
-        JSON.stringify({
-          success: true,
-          isNew: false,
-          message: "Este correo ya estaba registrado. Ya actualizamos tu información.",
-          customer_id: customer.id,
-        }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    } else {
-      console.log("[CUSTOMER] Creating new customer...");
-
-      const createBody: Record<string, unknown> = {
-        customer: {
-          email,
-          tags: tag,
-          email_marketing_consent: {
-            state: acceptsMarketing ? "subscribed" : "not_subscribed",
-            opt_in_level: "single_opt_in",
-          },
-        },
-      };
-
-      if (firstName) {
-        (createBody.customer as Record<string, unknown>).first_name = firstName;
-      }
-
-      const createRes = await fetch(`${apiBase}/customers.json`, {
+    console.log(`[CUSTOMER] Creating customer: ${email}`);
+    const res = await fetch(
+      "https://specializedsocks.myshopify.com/admin/api/2024-01/customers.json",
+      {
         method: "POST",
-        headers,
-        body: JSON.stringify(createBody),
-      });
-      const createData = await createRes.json();
-
-      if (!createRes.ok) {
-        console.error(`[CUSTOMER] Create failed [${createRes.status}]: ${JSON.stringify(createData)}`);
-        throw new Error(`Shopify create failed [${createRes.status}]`);
+        headers: {
+          "Content-Type": "application/json",
+          "X-Shopify-Access-Token": accessToken,
+        },
+        body: JSON.stringify(customerBody),
       }
+    );
 
-      console.log(`[CUSTOMER] Customer created: ${createData.customer?.id}`);
+    const data = await res.json();
+
+    if (res.ok) {
+      console.log(`[CUSTOMER] Created: ${data.customer?.id}`);
       return new Response(
-        JSON.stringify({
-          success: true,
-          isNew: true,
-          message: "Gracias, ya quedaste registrado.",
-          customer_id: createData.customer?.id,
-        }),
+        JSON.stringify({ success: true, isNew: true, message: "¡Gracias! Ya quedaste registrado." }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    // 422 = customer already exists — treat as success
+    if (res.status === 422) {
+      console.log(`[CUSTOMER] Already exists: ${email}`);
+      return new Response(
+        JSON.stringify({ success: true, isNew: false, message: "Este correo ya estaba registrado." }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    console.error(`[CUSTOMER] Shopify error [${res.status}]:`, JSON.stringify(data));
+    throw new Error(`Shopify API error [${res.status}]`);
   } catch (error: unknown) {
     console.error("[ERROR]:", error);
     const msg = error instanceof Error ? error.message : "Error desconocido";
