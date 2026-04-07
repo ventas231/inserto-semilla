@@ -5,17 +5,31 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const STOREFRONT_URL = "https://specializedsocks.myshopify.com/api/2024-01/graphql.json";
+const STOREFRONT_TOKEN = "85e8e43d4385add11d8292875b2c67de";
+
+const CUSTOMER_CREATE_MUTATION = `
+  mutation customerCreate($input: CustomerCreateInput!) {
+    customerCreate(input: $input) {
+      customer {
+        id
+        email
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const accessToken = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
-    if (!accessToken) {
-      throw new Error("SHOPIFY_ACCESS_TOKEN not configured");
-    }
-
     const { email, firstName } = await req.json();
 
     if (!email) {
@@ -25,55 +39,54 @@ serve(async (req) => {
       );
     }
 
-    const customerBody: Record<string, unknown> = {
-      customer: {
-        email,
-        tags: "recetario",
-        email_marketing_consent: {
-          state: "subscribed",
-          opt_in_level: "single_opt_in",
-        },
-      },
+    const input: Record<string, unknown> = {
+      email,
+      acceptsMarketing: true,
+      tags: ["recetario"],
     };
 
     if (firstName) {
-      (customerBody.customer as Record<string, unknown>).first_name = firstName;
+      input.firstName = firstName;
     }
 
-    console.log(`[CUSTOMER] Creating customer: ${email}`);
-    const res = await fetch(
-      "https://specializedsocks.myshopify.com/admin/api/2024-01/customers.json",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Shopify-Access-Token": accessToken,
-        },
-        body: JSON.stringify(customerBody),
-      }
-    );
+    console.log(`[CUSTOMER] Creating via Storefront API: ${email}`);
+
+    const res = await fetch(STOREFRONT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": STOREFRONT_TOKEN,
+      },
+      body: JSON.stringify({
+        query: CUSTOMER_CREATE_MUTATION,
+        variables: { input },
+      }),
+    });
 
     const data = await res.json();
+    console.log("[CUSTOMER] Response:", JSON.stringify(data));
 
-    if (res.ok) {
-      console.log(`[CUSTOMER] Created: ${data.customer?.id}`);
+    const errors = data?.data?.customerCreate?.customerUserErrors || [];
+    const successCodes = ["CUSTOMER_DISABLED", "TAKEN"];
+
+    if (errors.length === 0) {
       return new Response(
         JSON.stringify({ success: true, isNew: true, message: "¡Gracias! Ya quedaste registrado." }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // 422 = customer already exists — treat as success
-    if (res.status === 422) {
-      console.log(`[CUSTOMER] Already exists: ${email}`);
+    const allHandled = errors.every((e: { code: string }) => successCodes.includes(e.code));
+    if (allHandled) {
+      console.log(`[CUSTOMER] Already exists or disabled: ${email}`);
       return new Response(
         JSON.stringify({ success: true, isNew: false, message: "Este correo ya estaba registrado." }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    console.error(`[CUSTOMER] Shopify error [${res.status}]:`, JSON.stringify(data));
-    throw new Error(`Shopify API error [${res.status}]`);
+    console.error("[CUSTOMER] Unhandled errors:", JSON.stringify(errors));
+    throw new Error(errors.map((e: { message: string }) => e.message).join(", "));
   } catch (error: unknown) {
     console.error("[ERROR]:", error);
     const msg = error instanceof Error ? error.message : "Error desconocido";
