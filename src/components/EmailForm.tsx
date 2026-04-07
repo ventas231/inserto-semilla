@@ -52,24 +52,21 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData();
-      formData.append("form_type", "customer");
-      formData.append("utf8", "✓");
-      formData.append("contact[email]", result.data.email);
-      if (result.data.firstName) {
-        formData.append("contact[first_name]", result.data.firstName);
-      }
-      formData.append("contact[accepts_marketing]", "true");
-
-      const res = await fetch("https://specializedsocks.myshopify.com/contact", {
-        method: "POST",
-        body: formData,
-        mode: "no-cors",
+      const { data, error: fnError } = await supabase.functions.invoke("shopify-customer", {
+        body: { email: result.data.email, firstName: result.data.firstName },
       });
 
-      // With no-cors, we can't read the response, so we assume success if no error thrown
-      setResultMessage("¡Gracias! Ya quedaste registrado. 🌱");
-      setResultType("success");
+      if (fnError) {
+        console.error("Edge function error:", fnError);
+        setResultMessage("No se pudo guardar. Intenta de nuevo.");
+        setResultType("error");
+      } else if (data?.success) {
+        setResultMessage("¡Gracias! Ya quedaste registrado. 🌱");
+        setResultType("success");
+      } else {
+        setResultMessage(data?.message || "No se pudo guardar. Intenta de nuevo.");
+        setResultType("error");
+      }
     } catch (err) {
       console.error("Submit error:", err);
       setResultMessage("No se pudo guardar. Intenta de nuevo.");
