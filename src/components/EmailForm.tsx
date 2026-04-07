@@ -7,8 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 const formSchema = z.object({
   email: z.string().trim().email("Por favor ingresa un correo válido").max(255),
   firstName: z.string().trim().max(100).optional(),
-  code: z.string().trim().min(1, "Ingresa el código de tu papel semilla"),
-  acceptsMarketing: z.boolean(),
 });
 
 interface EmailFormProps {
@@ -18,8 +16,6 @@ interface EmailFormProps {
 const EmailForm = ({ formRef }: EmailFormProps) => {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [code, setCode] = useState("");
-  const [acceptsMarketing, setAcceptsMarketing] = useState(true);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resultMessage, setResultMessage] = useState("");
@@ -47,7 +43,7 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
     setResultMessage("");
     setResultType("");
 
-    const result = formSchema.safeParse({ email, firstName: firstName || undefined, code, acceptsMarketing });
+    const result = formSchema.safeParse({ email, firstName: firstName || undefined });
     if (!result.success) {
       setError(result.error.errors[0].message);
       return;
@@ -60,8 +56,7 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
         body: {
           email: result.data.email,
           firstName: result.data.firstName,
-          code: result.data.code,
-          acceptsMarketing: result.data.acceptsMarketing,
+          acceptsMarketing: true,
         },
       });
 
@@ -139,28 +134,6 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
               maxLength={100}
             />
 
-            <input
-              type="text"
-              inputMode="numeric"
-              value={code}
-              onChange={(e) => { setCode(e.target.value); setError(""); }}
-              placeholder="Código del papel semilla (ej: 000756)"
-              className="w-full h-13 px-5 rounded-xl border border-border bg-background text-foreground font-sans text-base placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all duration-300"
-              maxLength={10}
-              required
-            />
-
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={acceptsMarketing}
-                onChange={(e) => setAcceptsMarketing(e.target.checked)}
-                className="w-4 h-4 rounded border-border text-primary focus:ring-primary/30"
-              />
-              <span className="text-sm text-muted-foreground font-sans">
-                Acepto recibir correos con tips de cuidado 🌿
-              </span>
-            </label>
 
             {error && (
               <p className="text-sm text-destructive font-sans">{error}</p>
