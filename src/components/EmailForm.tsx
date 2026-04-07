@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { Leaf, Mail } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   email: z.string().trim().email("Por favor ingresa un correo válido").max(255),
@@ -52,25 +51,24 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
     setIsSubmitting(true);
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("shopify-customer", {
-        body: {
-          email: result.data.email,
-          firstName: result.data.firstName,
-          acceptsMarketing: true,
-        },
+      const formData = new FormData();
+      formData.append("form_type", "customer");
+      formData.append("utf8", "✓");
+      formData.append("contact[email]", result.data.email);
+      if (result.data.firstName) {
+        formData.append("contact[first_name]", result.data.firstName);
+      }
+      formData.append("contact[accepts_marketing]", "true");
+
+      const res = await fetch("https://specializedsocks.myshopify.com/contact", {
+        method: "POST",
+        body: formData,
+        mode: "no-cors",
       });
 
-      if (fnError) {
-        console.error("Edge function error:", fnError);
-        setResultMessage("No se pudo guardar. Intenta de nuevo.");
-        setResultType("error");
-      } else if (data?.success) {
-        setResultMessage(data.message);
-        setResultType("success");
-      } else {
-        setResultMessage(data?.message || "No se pudo guardar. Intenta de nuevo.");
-        setResultType("error");
-      }
+      // With no-cors, we can't read the response, so we assume success if no error thrown
+      setResultMessage("¡Gracias! Ya quedaste registrado. 🌱");
+      setResultType("success");
     } catch (err) {
       console.error("Submit error:", err);
       setResultMessage("No se pudo guardar. Intenta de nuevo.");
@@ -133,7 +131,6 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
               className="w-full h-13 px-5 rounded-xl border border-border bg-background text-foreground font-sans text-base placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all duration-300"
               maxLength={100}
             />
-
 
             {error && (
               <p className="text-sm text-destructive font-sans">{error}</p>
