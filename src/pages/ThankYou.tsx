@@ -19,7 +19,7 @@ const ThankYou = () => {
 
           <div className="bg-card/80 backdrop-blur-sm rounded-2xl border border-border/50 p-8 mt-8 space-y-5">
             <p className="text-lg text-foreground font-serif leading-relaxed">
-              Tu plantita ya está en camino 🌱
+              ¡Todo listo! 🌱
             </p>
             <p className="text-base text-muted-foreground font-sans leading-relaxed">
               Ahora revisa tu correo electrónico. Ahí encontrarás toda la información sobre la plantita que llegó en tu papel semilla y cómo empezar a cultivarla.
