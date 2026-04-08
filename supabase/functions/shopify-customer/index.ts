@@ -30,7 +30,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email, firstName } = await req.json();
+    const { email, firstName, tags } = await req.json();
 
     if (!email) {
       return new Response(
@@ -39,17 +39,20 @@ serve(async (req) => {
       );
     }
 
+    // tags comes as an array like ["flor-de-nube", "papel-semilla", "mexico"]
+    const tagList: string[] = Array.isArray(tags) ? tags : ["recetario"];
+
     const input: Record<string, unknown> = {
       email,
       acceptsMarketing: true,
-      tags: ["recetario"],
+      tags: tagList,
     };
 
     if (firstName) {
       input.firstName = firstName;
     }
 
-    console.log(`[CUSTOMER] Creating via Storefront API: ${email}`);
+    console.log(`[CUSTOMER] Creating via Storefront API: ${email}, tags: ${tagList.join(", ")}`);
 
     const res = await fetch(STOREFRONT_URL, {
       method: "POST",
