@@ -26,14 +26,20 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
   const ref = formRef || sectionRef;
 
   useEffect(() => {
+    const el = ref.current || sectionRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setIsVisible(true);
+      return;
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setIsVisible(true);
       },
-      { threshold: 0.2 }
+      { threshold: 0.2, rootMargin: "0px 0px -50px 0px" }
     );
-    const el = ref.current || sectionRef.current;
-    if (el) observer.observe(el);
+    observer.observe(el);
     return () => observer.disconnect();
   }, [ref]);
 
