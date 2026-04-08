@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { Leaf, Mail } from "lucide-react";
@@ -9,6 +10,12 @@ const codeMap: Record<string, string> = {
   "000000": "flor-de-nube",
   "000111": "manzanilla",
   "000571": "chia",
+};
+
+const plantLabel: Record<string, string> = {
+  "flor-de-nube": "papel-nube",
+  "manzanilla": "papel-manzanilla",
+  "chia": "papel-chia",
 };
 
 const formSchema = z.object({
@@ -22,6 +29,7 @@ interface EmailFormProps {
 }
 
 const EmailForm = ({ formRef }: EmailFormProps) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [code, setCode] = useState("");
@@ -73,7 +81,8 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
     setIsSubmitting(true);
 
     try {
-      const tags = [plant, "papel-semilla", "mexico"];
+      const papelTag = plantLabel[plant] || "papel-semilla";
+      const tags = [plant, papelTag, "mexico"];
 
       const { data, error: fnError } = await supabase.functions.invoke("shopify-customer", {
         body: {
@@ -88,8 +97,7 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
         setResultMessage("No se pudo guardar. Intenta de nuevo.");
         setResultType("error");
       } else if (data?.success) {
-        setResultMessage("¡Gracias! Ya quedaste registrado. 🌱");
-        setResultType("success");
+        navigate("/gracias");
       } else {
         setResultMessage(data?.message || "No se pudo guardar. Intenta de nuevo.");
         setResultType("error");
@@ -102,24 +110,6 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
       setIsSubmitting(false);
     }
   };
-
-  if (resultType === "success") {
-    return (
-      <section ref={ref} className="py-16 sm:py-20 px-6 bg-gradient-to-b from-background to-secondary/20">
-        <div className="max-w-md mx-auto">
-          <div className="bg-card/80 backdrop-blur-sm border border-border/40 rounded-2xl p-8 sm:p-10 shadow-sm text-center">
-            <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-5">
-              <span className="text-3xl">🌱</span>
-            </div>
-            <h2 className="text-2xl font-serif text-foreground mb-3">{resultMessage}</h2>
-            <p className="text-sm text-muted-foreground font-sans">
-              Revisa tu correo electrónico para más información sobre tu plantita.
-            </p>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section ref={ref} className="py-16 sm:py-20 px-6 bg-gradient-to-b from-background to-secondary/20">
