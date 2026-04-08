@@ -4,9 +4,17 @@ import { z } from "zod";
 import { Leaf, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
+const codeMap: Record<string, string> = {
+  "000756": "flor-de-nube",
+  "000000": "flor-de-nube",
+  "000111": "manzanilla",
+  "000571": "chia",
+};
+
 const formSchema = z.object({
   email: z.string().trim().email("Por favor ingresa un correo válido").max(255),
   firstName: z.string().trim().max(100).optional(),
+  code: z.string().trim().min(1, "Ingresa el código de tu papel semilla"),
 });
 
 interface EmailFormProps {
@@ -16,6 +24,7 @@ interface EmailFormProps {
 const EmailForm = ({ formRef }: EmailFormProps) => {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
+  const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resultMessage, setResultMessage] = useState("");
@@ -49,17 +58,29 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
     setResultMessage("");
     setResultType("");
 
-    const result = formSchema.safeParse({ email, firstName: firstName || undefined });
+    const result = formSchema.safeParse({ email, firstName: firstName || undefined, code });
     if (!result.success) {
       setError(result.error.errors[0].message);
+      return;
+    }
+
+    const plant = codeMap[result.data.code];
+    if (!plant) {
+      setError("Código no válido. Revisa el número impreso en tu papel semilla.");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
+      const tags = [plant, "papel-semilla", "mexico"];
+
       const { data, error: fnError } = await supabase.functions.invoke("shopify-customer", {
-        body: { email: result.data.email, firstName: result.data.firstName },
+        body: {
+          email: result.data.email,
+          firstName: result.data.firstName,
+          tags,
+        },
       });
 
       if (fnError) {
@@ -112,7 +133,7 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
               Desbloquea tu guía
             </h2>
             <p className="text-sm text-muted-foreground font-sans">
-              Ingresa tu correo y descubre qué planta vive en tu papel semilla.
+              Ingresa tu correo y el código de tu papel semilla para descubrir qué planta vive en él.
             </p>
           </div>
 
@@ -135,6 +156,21 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
               className="w-full h-13 px-5 rounded-xl border border-border bg-background text-foreground font-sans text-base placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all duration-300"
               maxLength={100}
             />
+
+            <div>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={code}
+                onChange={(e) => { setCode(e.target.value); setError(""); }}
+                placeholder="Código de tu papel semilla (ej: 000756)"
+                className="w-full h-13 px-5 rounded-xl border border-border bg-background text-foreground font-sans text-base placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all duration-300"
+                maxLength={10}
+              />
+              <p className="mt-2 text-xs text-muted-foreground/70 font-sans">
+                Si tu papel semilla no tiene código, ingresa <span className="font-medium text-muted-foreground">000000</span>.
+              </p>
+            </div>
 
             {error && (
               <p className="text-sm text-destructive font-sans">{error}</p>
