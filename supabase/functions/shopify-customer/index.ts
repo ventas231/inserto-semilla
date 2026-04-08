@@ -39,8 +39,8 @@ serve(async (req) => {
       );
     }
 
-    // tags comes as an array like ["flor-de-nube", "papel-semilla", "mexico"]
-    const tagList: string[] = Array.isArray(tags) ? tags : ["recetario"];
+    // If tags array is provided use it; otherwise default to "recetario"
+    const tagList: string[] = Array.isArray(tags) && tags.length > 0 ? tags : ["recetario"];
 
     const input: Record<string, unknown> = {
       email,
