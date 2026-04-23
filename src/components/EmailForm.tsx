@@ -90,24 +90,24 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
         tags,
       };
 
-      const [shopifyRes, klaviyoRes] = await Promise.all([
-        supabase.functions.invoke("shopify-customer", { body: payload }),
-        supabase.functions.invoke("klaviyo-subscribe", { body: payload }),
-      ]);
-
-      const { data, error: fnError } = shopifyRes;
-
-      if (klaviyoRes.error) {
-        console.error("Klaviyo error:", klaviyoRes.error);
-      } else {
-        console.log("Klaviyo response:", klaviyoRes.data);
-      }
+      const { data, error: fnError } = await supabase.functions.invoke("shopify-customer", {
+        body: payload,
+      });
 
       if (fnError) {
         console.error("Edge function error:", fnError);
         setResultMessage("No se pudo guardar. Intenta de nuevo.");
         setResultType("error");
       } else if (data?.success) {
+        // Fire-and-forget: suscribir a Klaviyo sin bloquear la navegación
+        supabase.functions
+          .invoke("klaviyo-subscribe", { body: payload })
+          .then((res) => {
+            if (res.error) console.error("Klaviyo error:", res.error);
+            else console.log("Klaviyo response:", res.data);
+          })
+          .catch((err) => console.error("Klaviyo error:", err));
+
         navigate("/gracias");
       } else {
         setResultMessage(data?.message || "No se pudo guardar. Intenta de nuevo.");
