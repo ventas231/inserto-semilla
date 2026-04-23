@@ -84,13 +84,24 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
       const papelTag = plantLabel[plant] || "papel-semilla";
       const tags = [plant, papelTag, "mexico"];
 
-      const { data, error: fnError } = await supabase.functions.invoke("shopify-customer", {
-        body: {
-          email: result.data.email,
-          firstName: result.data.firstName,
-          tags,
-        },
-      });
+      const payload = {
+        email: result.data.email,
+        firstName: result.data.firstName,
+        tags,
+      };
+
+      const [shopifyRes, klaviyoRes] = await Promise.all([
+        supabase.functions.invoke("shopify-customer", { body: payload }),
+        supabase.functions.invoke("klaviyo-subscribe", { body: payload }),
+      ]);
+
+      const { data, error: fnError } = shopifyRes;
+
+      if (klaviyoRes.error) {
+        console.error("Klaviyo error:", klaviyoRes.error);
+      } else {
+        console.log("Klaviyo response:", klaviyoRes.data);
+      }
 
       if (fnError) {
         console.error("Edge function error:", fnError);
