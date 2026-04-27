@@ -18,6 +18,13 @@ const plantLabel: Record<string, string> = {
   "chia": "papel-chia",
 };
 
+const papelSemillaMap: Record<string, string> = {
+  "000000": "nube",
+  "000756": "nube",
+  "000111": "Manzanilla",
+  "000571": "Chia",
+};
+
 const formSchema = z.object({
   email: z.string().trim().email("Por favor ingresa un correo válido").max(255),
   firstName: z.string().trim().max(100).optional(),
@@ -83,6 +90,7 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
     try {
       const papelTag = plantLabel[plant] || "papel-semilla";
       const tags = [plant, papelTag, "mexico"];
+      const papel_semilla = papelSemillaMap[result.data.code];
 
       const payload = {
         email: result.data.email,
@@ -101,7 +109,9 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
       } else if (data?.success) {
         // Fire-and-forget: suscribir a Klaviyo sin bloquear la navegación
         supabase.functions
-          .invoke("klaviyo-subscribe", { body: payload })
+          .invoke("klaviyo-subscribe", {
+            body: { ...payload, papel_semilla, origen: "plantita" },
+          })
           .then((res) => {
             if (res.error) console.error("Klaviyo error:", res.error);
             else console.log("Klaviyo response:", res.data);

@@ -24,7 +24,7 @@ serve(async (req) => {
       );
     }
 
-    const { email, firstName, tags } = await req.json();
+    const { email, firstName, tags, papel_semilla, origen } = await req.json();
 
     if (!email || typeof email !== "string") {
       return new Response(
@@ -34,8 +34,10 @@ serve(async (req) => {
     }
 
     const tagList: string[] = Array.isArray(tags) ? tags : [];
+    const papelSemillaClean = typeof papel_semilla === "string" && papel_semilla.trim() ? papel_semilla.trim() : null;
+    const origenClean = typeof origen === "string" && origen.trim() ? origen.trim() : "plantita";
 
-    console.log(`[KLAVIYO] Subscribing ${email} to list ${KLAVIYO_LIST_ID}, tags: ${tagList.join(", ")}`);
+    console.log(`[KLAVIYO] Subscribing ${email} to list ${KLAVIYO_LIST_ID}, tags: ${tagList.join(", ")}, papel_semilla: ${papelSemillaClean}, origen: ${origenClean}`);
 
     const headers = {
       "Authorization": `Klaviyo-API-Key ${KLAVIYO_API_KEY}`,
@@ -45,6 +47,12 @@ serve(async (req) => {
     };
 
     // Subscribe profile to list (creates profile if it doesn't exist + sets consent)
+    const profileProperties: Record<string, unknown> = {
+      ...(tagList.length > 0 ? { tags: tagList } : {}),
+      papel_semilla: papelSemillaClean,
+      origen: origenClean,
+    };
+
     const subscribeBody = {
       data: {
         type: "profile-subscription-bulk-create-job",
@@ -63,9 +71,7 @@ serve(async (req) => {
                       },
                     },
                   },
-                  ...(tagList.length > 0
-                    ? { properties: { tags: tagList, papel_semilla: tagList[0] } }
-                    : {}),
+                  properties: profileProperties,
                 },
               },
             ],
@@ -102,8 +108,8 @@ serve(async (req) => {
       );
     }
 
-    // Also upsert profile properties (tags) so they are searchable in Klaviyo
-    if (tagList.length > 0 || firstName) {
+    // Also upsert profile properties so they are searchable in Klaviyo
+    {
       const upsertBody = {
         data: {
           type: "profile",
@@ -111,8 +117,9 @@ serve(async (req) => {
             email,
             ...(firstName ? { first_name: firstName } : {}),
             properties: {
-              tags: tagList,
-              papel_semilla: tagList[0] || null,
+              ...(tagList.length > 0 ? { tags: tagList } : {}),
+              papel_semilla: papelSemillaClean,
+              origen: origenClean,
             },
           },
         },
