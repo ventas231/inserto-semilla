@@ -108,8 +108,8 @@ serve(async (req) => {
       );
     }
 
-    // Also upsert profile properties (tags) so they are searchable in Klaviyo
-    if (tagList.length > 0 || firstName) {
+    // Also upsert profile properties so they are searchable in Klaviyo
+    {
       const upsertBody = {
         data: {
           type: "profile",
@@ -117,8 +117,9 @@ serve(async (req) => {
             email,
             ...(firstName ? { first_name: firstName } : {}),
             properties: {
-              tags: tagList,
-              papel_semilla: tagList[0] || null,
+              ...(tagList.length > 0 ? { tags: tagList } : {}),
+              papel_semilla: papelSemillaClean,
+              origen: origenClean,
             },
           },
         },
