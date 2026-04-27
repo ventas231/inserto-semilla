@@ -24,7 +24,7 @@ serve(async (req) => {
       );
     }
 
-    const { email, firstName, tags } = await req.json();
+    const { email, firstName, tags, papel_semilla, origen } = await req.json();
 
     if (!email || typeof email !== "string") {
       return new Response(
@@ -34,8 +34,10 @@ serve(async (req) => {
     }
 
     const tagList: string[] = Array.isArray(tags) ? tags : [];
+    const papelSemillaClean = typeof papel_semilla === "string" && papel_semilla.trim() ? papel_semilla.trim() : null;
+    const origenClean = typeof origen === "string" && origen.trim() ? origen.trim() : "plantita";
 
-    console.log(`[KLAVIYO] Subscribing ${email} to list ${KLAVIYO_LIST_ID}, tags: ${tagList.join(", ")}`);
+    console.log(`[KLAVIYO] Subscribing ${email} to list ${KLAVIYO_LIST_ID}, tags: ${tagList.join(", ")}, papel_semilla: ${papelSemillaClean}, origen: ${origenClean}`);
 
     const headers = {
       "Authorization": `Klaviyo-API-Key ${KLAVIYO_API_KEY}`,
