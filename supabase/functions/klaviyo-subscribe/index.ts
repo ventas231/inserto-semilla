@@ -62,17 +62,9 @@ serve(async (req) => {
               {
                 type: "profile",
                 attributes: {
-                  profile: {
-                    data: {
-                      type: "profile",
-                      attributes: {
-                        email,
-                        ...(firstName ? { first_name: firstName } : {}),
-                        properties: profileProperties,
-                      },
-                    },
-                  },
                   email,
+                  ...(firstName ? { first_name: firstName } : {}),
+                  properties: profileProperties,
                   subscriptions: {
                     email: {
                       marketing: {
