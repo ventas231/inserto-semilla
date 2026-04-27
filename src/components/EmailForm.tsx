@@ -90,6 +90,7 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
     try {
       const papelTag = plantLabel[plant] || "papel-semilla";
       const tags = [plant, papelTag, "mexico"];
+      const papel_semilla = papelSemillaMap[result.data.code];
 
       const payload = {
         email: result.data.email,
