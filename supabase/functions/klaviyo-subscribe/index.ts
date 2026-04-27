@@ -47,6 +47,12 @@ serve(async (req) => {
     };
 
     // Subscribe profile to list (creates profile if it doesn't exist + sets consent)
+    const profileProperties: Record<string, unknown> = {
+      ...(tagList.length > 0 ? { tags: tagList } : {}),
+      papel_semilla: papelSemillaClean,
+      origen: origenClean,
+    };
+
     const subscribeBody = {
       data: {
         type: "profile-subscription-bulk-create-job",
@@ -65,9 +71,7 @@ serve(async (req) => {
                       },
                     },
                   },
-                  ...(tagList.length > 0
-                    ? { properties: { tags: tagList, papel_semilla: tagList[0] } }
-                    : {}),
+                  properties: profileProperties,
                 },
               },
             ],
