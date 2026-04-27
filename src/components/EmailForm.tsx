@@ -109,7 +109,9 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
       } else if (data?.success) {
         // Fire-and-forget: suscribir a Klaviyo sin bloquear la navegación
         supabase.functions
-          .invoke("klaviyo-subscribe", { body: payload })
+          .invoke("klaviyo-subscribe", {
+            body: { ...payload, papel_semilla, origen: "plantita" },
+          })
           .then((res) => {
             if (res.error) console.error("Klaviyo error:", res.error);
             else console.log("Klaviyo response:", res.data);
