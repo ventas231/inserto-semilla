@@ -62,8 +62,17 @@ serve(async (req) => {
               {
                 type: "profile",
                 attributes: {
+                  profile: {
+                    data: {
+                      type: "profile",
+                      attributes: {
+                        email,
+                        ...(firstName ? { first_name: firstName } : {}),
+                        properties: profileProperties,
+                      },
+                    },
+                  },
                   email,
-                  ...(firstName ? { first_name: firstName } : {}),
                   subscriptions: {
                     email: {
                       marketing: {
@@ -71,7 +80,6 @@ serve(async (req) => {
                       },
                     },
                   },
-                  properties: profileProperties,
                 },
               },
             ],
@@ -102,10 +110,7 @@ serve(async (req) => {
     console.log(`[KLAVIYO] Subscribe status: ${subRes.status}, body: ${subText}`);
 
     if (!subRes.ok && subRes.status !== 202) {
-      return new Response(
-        JSON.stringify({ success: false, error: `Klaviyo subscribe failed: ${subText}` }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      console.error(`[KLAVIYO] Subscribe failed (continuing to profile-import): ${subText}`);
     }
 
     // Also upsert profile properties so they are searchable in Klaviyo
