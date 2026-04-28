@@ -36,9 +36,7 @@ const resolveTargetListId = async (headers: Record<string, string>, fallbackList
     }
   }
 
-  const allListsUrl = new URL("https://a.klaviyo.com/api/lists");
-  allListsUrl.searchParams.set("page[size]", "100");
-  const allListsRes = await fetch(allListsUrl.toString(), { method: "GET", headers });
+  const allListsRes = await fetch("https://a.klaviyo.com/api/lists", { method: "GET", headers });
   const allListsText = await allListsRes.text();
   console.log(`[KLAVIYO] List scan status: ${allListsRes.status}, body: ${allListsText}`);
 
