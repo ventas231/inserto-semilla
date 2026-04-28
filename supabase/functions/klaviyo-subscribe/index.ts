@@ -9,6 +9,13 @@ const KLAVIYO_REVISION = "2024-10-15";
 const TARGET_LIST_NAME = "Selling Secret-Suscriptores";
 let cachedTargetListId: string | null = null;
 
+const normalizeName = (name: string) =>
+  name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+
 const resolveTargetListId = async (headers: Record<string, string>, fallbackListId: string | null) => {
   if (cachedTargetListId) return cachedTargetListId;
 
@@ -22,6 +29,25 @@ const resolveTargetListId = async (headers: Record<string, string>, fallbackList
   if (listRes.ok) {
     const listData = listText ? JSON.parse(listText) : null;
     const targetList = Array.isArray(listData?.data) ? listData.data[0] : null;
+
+    if (targetList?.id) {
+      cachedTargetListId = targetList.id;
+      return cachedTargetListId;
+    }
+  }
+
+  const allListsUrl = new URL("https://a.klaviyo.com/api/lists");
+  allListsUrl.searchParams.set("page[size]", "100");
+  const allListsRes = await fetch(allListsUrl.toString(), { method: "GET", headers });
+  const allListsText = await allListsRes.text();
+  console.log(`[KLAVIYO] List scan status: ${allListsRes.status}, body: ${allListsText}`);
+
+  if (allListsRes.ok) {
+    const allListsData = allListsText ? JSON.parse(allListsText) : null;
+    const targetSlug = normalizeName(TARGET_LIST_NAME);
+    const targetList = Array.isArray(allListsData?.data)
+      ? allListsData.data.find((list: { attributes?: { name?: string } }) => normalizeName(list.attributes?.name || "") === targetSlug)
+      : null;
 
     if (targetList?.id) {
       cachedTargetListId = targetList.id;
