@@ -98,31 +98,27 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
         tags,
       };
 
-      const { data, error: fnError } = await supabase.functions.invoke("shopify-customer", {
-        body: payload,
-      });
+      const klaviyoPayload = { ...payload, papel_semilla, origen: "plantita" };
+      const [shopifyResult, klaviyoResult] = await Promise.allSettled([
+        supabase.functions.invoke("shopify-customer", { body: payload }),
+        supabase.functions.invoke("klaviyo-subscribe", { body: klaviyoPayload }),
+      ]);
 
-      if (fnError) {
-        console.error("Edge function error:", fnError);
-        setResultMessage("No se pudo guardar. Intenta de nuevo.");
-        setResultType("error");
-      } else if (data?.success) {
-        // Fire-and-forget: suscribir a Klaviyo sin bloquear la navegación
-        supabase.functions
-          .invoke("klaviyo-subscribe", {
-            body: { ...payload, papel_semilla, origen: "plantita" },
-          })
-          .then((res) => {
-            if (res.error) console.error("Klaviyo error:", res.error);
-            else console.log("Klaviyo response:", res.data);
-          })
-          .catch((err) => console.error("Klaviyo error:", err));
-
-        navigate("/gracias");
-      } else {
-        setResultMessage(data?.message || "No se pudo guardar. Intenta de nuevo.");
-        setResultType("error");
+      if (shopifyResult.status === "rejected") {
+        console.warn("Shopify error:", shopifyResult.reason);
+      } else if (shopifyResult.value.error || !shopifyResult.value.data?.success) {
+        console.warn("Shopify response:", shopifyResult.value.error || shopifyResult.value.data);
       }
+
+      if (klaviyoResult.status === "rejected") {
+        console.error("Klaviyo error:", klaviyoResult.reason);
+      } else if (klaviyoResult.value.error || !klaviyoResult.value.data?.success) {
+        console.error("Klaviyo response:", klaviyoResult.value.error || klaviyoResult.value.data);
+      } else {
+        console.log("Klaviyo response:", klaviyoResult.value.data);
+      }
+
+      navigate("/gracias");
     } catch (err) {
       console.error("Submit error:", err);
       setResultMessage("No se pudo guardar. Intenta de nuevo.");

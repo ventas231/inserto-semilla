@@ -6,6 +6,60 @@ const corsHeaders = {
 };
 
 const KLAVIYO_REVISION = "2024-10-15";
+const TARGET_LIST_NAME = "Seedling Secret - Suscriptores";
+let cachedTargetListId: string | null = null;
+
+const normalizeName = (name: string) =>
+  name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+
+const resolveTargetListId = async (headers: Record<string, string>, fallbackListId: string | null) => {
+  if (cachedTargetListId) return cachedTargetListId;
+
+  const listUrl = new URL("https://a.klaviyo.com/api/lists");
+  listUrl.searchParams.set("filter", `equals(name,"${TARGET_LIST_NAME}")`);
+
+  const listRes = await fetch(listUrl.toString(), { method: "GET", headers });
+  const listText = await listRes.text();
+  console.log(`[KLAVIYO] List lookup (${TARGET_LIST_NAME}) status: ${listRes.status}, body: ${listText}`);
+
+  if (listRes.ok) {
+    const listData = listText ? JSON.parse(listText) : null;
+    const targetList = Array.isArray(listData?.data) ? listData.data[0] : null;
+
+    if (targetList?.id) {
+      cachedTargetListId = targetList.id;
+      return cachedTargetListId;
+    }
+  }
+
+  const allListsRes = await fetch("https://a.klaviyo.com/api/lists", { method: "GET", headers });
+  const allListsText = await allListsRes.text();
+  console.log(`[KLAVIYO] List scan status: ${allListsRes.status}, body: ${allListsText}`);
+
+  if (allListsRes.ok) {
+    const allListsData = allListsText ? JSON.parse(allListsText) : null;
+    const targetSlug = normalizeName(TARGET_LIST_NAME);
+    const targetList = Array.isArray(allListsData?.data)
+      ? allListsData.data.find((list: { attributes?: { name?: string } }) => normalizeName(list.attributes?.name || "") === targetSlug)
+      : null;
+
+    if (targetList?.id) {
+      cachedTargetListId = targetList.id;
+      return cachedTargetListId;
+    }
+  }
+
+  if (fallbackListId) {
+    console.warn(`[KLAVIYO] Target list name not resolved; using KLAVIYO_LIST_ID fallback: ${fallbackListId}`);
+    return fallbackListId;
+  }
+
+  throw new Error(`No se encontró la lista de Klaviyo: ${TARGET_LIST_NAME}`);
+};
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -14,9 +68,9 @@ serve(async (req) => {
 
   try {
     const KLAVIYO_API_KEY = Deno.env.get("KLAVIYO_API_KEY");
-    const KLAVIYO_LIST_ID = Deno.env.get("KLAVIYO_LIST_ID");
+    const KLAVIYO_LIST_ID = Deno.env.get("KLAVIYO_LIST_ID") || null;
 
-    if (!KLAVIYO_API_KEY || !KLAVIYO_LIST_ID) {
+    if (!KLAVIYO_API_KEY) {
       console.error("[KLAVIYO] Missing credentials");
       return new Response(
         JSON.stringify({ success: false, error: "Klaviyo not configured" }),
@@ -46,12 +100,8 @@ serve(async (req) => {
       "revision": KLAVIYO_REVISION,
     };
 
-    // Subscribe profile to list (creates profile if it doesn't exist + sets consent)
-    const profileProperties: Record<string, unknown> = {
-      ...(tagList.length > 0 ? { tags: tagList } : {}),
-      papel_semilla: papelSemillaClean,
-      origen: origenClean,
-    };
+    const targetListId = await resolveTargetListId(headers, KLAVIYO_LIST_ID);
+    console.log(`[KLAVIYO] Using target list ${TARGET_LIST_NAME} (${targetListId})`);
 
     const subscribeBody = {
       data: {
@@ -80,7 +130,7 @@ serve(async (req) => {
           list: {
             data: {
               type: "list",
-              id: KLAVIYO_LIST_ID,
+              id: targetListId,
             },
           },
         },
