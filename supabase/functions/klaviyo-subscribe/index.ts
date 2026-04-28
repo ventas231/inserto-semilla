@@ -6,7 +6,7 @@ const corsHeaders = {
 };
 
 const KLAVIYO_REVISION = "2024-10-15";
-const TARGET_LIST_NAME = "Selling Secret-Suscriptores";
+const TARGET_LIST_NAME = "Seedling Secret - Suscriptores";
 let cachedTargetListId: string | null = null;
 
 const normalizeName = (name: string) =>
