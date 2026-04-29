@@ -49,7 +49,7 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
               <em className="italic text-primary">Es vida esperando despertar.</em>
             </h1>
 
-            <p className="animate-fade-up-delay-2 text-lg text-muted-foreground max-w-md mb-8 font-sans leading-relaxed">
+            <p className="animate-fade-up-delay-2 text-xl sm:text-2xl text-foreground font-medium max-w-md mb-8 font-sans leading-relaxed">
               Descubre qué plantita llegó a tus manos y recibe una guía exclusiva para verla florecer.
             </p>
 
