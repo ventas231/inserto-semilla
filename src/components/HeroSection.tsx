@@ -15,7 +15,7 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
         <img
           src={heroImage}
           alt="Papel semilla con brotes verdes emergiendo"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover opacity-60"
           loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/60 to-primary/20" />
