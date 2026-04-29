@@ -19,15 +19,15 @@ const Index = () => {
 
       <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
 
-      <StorytellingSection onStepClick={scrollToForm} />
+      <MysterySection onCtaClick={scrollToForm} />
 
       <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-      <BenefitsSection onCtaClick={scrollToForm} />
+      <StorytellingSection onStepClick={scrollToForm} />
 
       <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
 
-      <MysterySection onCtaClick={scrollToForm} />
+      <BenefitsSection onCtaClick={scrollToForm} />
 
       <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
