@@ -200,7 +200,7 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
           </form>
 
           <p className="mt-5 text-xs text-muted-foreground font-sans text-center">
-            Solo usaremos tu correo para enviarte la guía. Sin spam. 🌿
+            Recibirás tu guía, ofertas, descuentos y lanzamientos exclusivos. 🌿
           </p>
         </div>
       </div>
