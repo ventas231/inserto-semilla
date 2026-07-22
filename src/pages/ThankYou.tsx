@@ -44,16 +44,11 @@ const ThankYou = () => {
               </p>
             </div>
 
-            <div className="flex items-center justify-center gap-3 bg-background/60 border border-border/50 rounded-xl px-5 py-4">
-              <span className="text-xs text-muted-foreground font-sans uppercase tracking-wider">Código:</span>
-              <span className="text-xl sm:text-2xl font-serif text-foreground tracking-widest">100GRATIS</span>
-            </div>
-
             <a
               href="https://specialfitsocks.com/discount/100GRATIS"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-full h-13 px-6 rounded-xl bg-yellow-300 text-black font-sans text-base font-bold hover:bg-yellow-400 hover:scale-105 hover:-translate-y-1 animate-neon-glow transition-all duration-300"
+              className="inline-flex items-center justify-center w-full h-14 px-6 rounded-xl bg-yellow-300 text-black font-sans text-lg font-bold hover:bg-yellow-400 hover:scale-105 hover:-translate-y-1 animate-neon-glow transition-all duration-300"
             >
               Visitar tienda oficial
             </a>
