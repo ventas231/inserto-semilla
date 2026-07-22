@@ -18,15 +18,15 @@ const ThankYou = () => {
           </h1>
 
           <div className="bg-card/80 backdrop-blur-sm rounded-2xl border border-border/50 p-8 mt-8 space-y-5">
-            <p className="text-lg text-foreground font-serif leading-relaxed">
+            <p className="text-xl sm:text-2xl text-foreground font-serif leading-relaxed">
               ¡Todo listo! 🌱
             </p>
-            <p className="text-base text-muted-foreground font-sans leading-relaxed">
+            <p className="text-base text-muted-foreground font-sans leading-relaxed font-bold">
               Ahora revisa tu correo electrónico. Ahí encontrarás toda la información sobre la plantita que llegó en tu papel semilla y cómo empezar a cultivarla.
             </p>
             <div className="border-t border-border/50 pt-5">
               <p className="text-sm text-muted-foreground/80 font-sans leading-relaxed">
-                📬 Si no ves el correo en tu bandeja principal, revisa también tu carpeta de promociones o spam.
+                ⚠️ Si no ves el correo en tu bandeja principal, <span className="font-bold">revisa promociones o spam</span>.
               </p>
             </div>
           </div>
@@ -34,7 +34,7 @@ const ThankYou = () => {
           <div className="mt-10 bg-card/80 backdrop-blur-sm rounded-2xl border border-border/50 p-8 max-w-md mx-auto space-y-5">
             <div className="text-center space-y-3">
               <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-sans font-medium tracking-wide">
-                Regalo especial
+                🎁 Regalo especial
               </span>
               <h2 className="text-2xl sm:text-3xl font-serif text-foreground leading-tight">
                 $100 MXN de dinero electrónico
@@ -44,7 +44,7 @@ const ThankYou = () => {
               </p>
             </div>
 
-            <div className="flex items-center justify-center gap-3 bg-background/60 border border-dashed border-primary/30 rounded-xl px-5 py-4">
+            <div className="flex items-center justify-center gap-3 bg-background/60 border-2 border-dashed border-primary/60 rounded-xl px-5 py-4">
               <span className="text-xs text-muted-foreground font-sans uppercase tracking-wider">Código:</span>
               <span className="text-xl sm:text-2xl font-serif text-foreground tracking-widest">100GRATIS</span>
             </div>
@@ -53,7 +53,7 @@ const ThankYou = () => {
               href="https://specialfitsocks.com/discount/100GRATIS"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-full h-13 px-6 rounded-xl bg-yellow-400 text-black font-sans text-base font-medium hover:bg-yellow-500 transition-colors duration-300"
+              className="inline-flex items-center justify-center w-full h-13 px-6 rounded-xl bg-yellow-300 text-black font-sans text-base font-bold hover:bg-yellow-400 hover:scale-105 hover:-translate-y-0.5 animate-pulse transition-all duration-300 shadow-lg shadow-yellow-300/40"
             >
               Visitar tienda oficial
             </a>
