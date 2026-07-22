@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import manzanillaImg from "@/assets/manzanilla.jpg";
 import florDeNubeImg from "@/assets/flor-de-nube.jpg";
 import chiaImg from "@/assets/chia.jpg";
-import perroImg from "@/assets/perro-planta-no-encontrada.jpg";
+import perroAsset from "@/assets/perro-planta-no-encontrada.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Sprout, Droplets, Sun, Clock, AlertCircle } from "lucide-react";
 
