@@ -31,15 +31,6 @@ const ThankYou = () => {
             </div>
           </div>
 
-          <div className="mt-10 rounded-2xl overflow-hidden shadow-lg max-w-sm mx-auto">
-            <img
-              src={growingPlantsImg}
-              alt="Plantitas creciendo en macetas biodegradables"
-              className="w-full h-48 object-cover"
-              loading="lazy"
-            />
-          </div>
-
           <div className="mt-10 bg-card/80 backdrop-blur-sm rounded-2xl border border-border/50 p-8 max-w-md mx-auto space-y-5">
             <div className="text-center space-y-3">
               <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-sans font-medium tracking-wide">
@@ -62,7 +53,7 @@ const ThankYou = () => {
               href="https://specialfitsocks.com/discount/100GRATIS"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-full h-13 px-6 rounded-xl bg-primary text-primary-foreground font-sans text-base font-medium hover:bg-primary/90 transition-colors duration-300"
+              className="inline-flex items-center justify-center w-full h-13 px-6 rounded-xl bg-yellow-400 text-black font-sans text-base font-medium hover:bg-yellow-500 transition-colors duration-300"
             >
               Visitar tienda oficial
             </a>
@@ -70,6 +61,15 @@ const ThankYou = () => {
             <p className="text-xs text-muted-foreground font-sans text-center leading-relaxed">
               Al usar este enlace, el descuento de $100 MXN se aplicará automáticamente en tu carrito.
             </p>
+          </div>
+
+          <div className="mt-10 rounded-2xl overflow-hidden shadow-lg max-w-sm mx-auto">
+            <img
+              src={growingPlantsImg}
+              alt="Plantitas creciendo en macetas biodegradables"
+              className="w-full h-48 object-cover"
+              loading="lazy"
+            />
           </div>
 
           <p className="text-center text-xs text-muted-foreground/50 font-sans mt-12">
