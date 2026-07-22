@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import manzanillaImg from "@/assets/manzanilla.jpg";
 import florDeNubeImg from "@/assets/flor-de-nube.jpg";
 import chiaImg from "@/assets/chia.jpg";
-import perroImg from "@/assets/perro-planta-no-encontrada.jpg";
+import perroAsset from "@/assets/perro-planta-no-encontrada.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Sprout, Droplets, Sun, Clock, AlertCircle } from "lucide-react";
 
@@ -73,7 +73,7 @@ const Reveal = () => {
         <div className="text-center max-w-md mx-auto">
           <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden mx-auto mb-6 shadow-lg bg-secondary/30">
             <img
-              src={perroImg}
+              src={perroAsset.url}
               alt="Perrito amigable"
               className="w-full h-full object-cover"
               loading="lazy"
