@@ -73,7 +73,7 @@ const Reveal = () => {
         <div className="text-center max-w-md mx-auto">
           <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden mx-auto mb-6 shadow-lg bg-secondary/30">
             <img
-              src={perroImg}
+              src={perroAsset.url}
               alt="Perrito amigable"
               className="w-full h-full object-cover"
               loading="lazy"
