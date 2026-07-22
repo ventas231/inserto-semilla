@@ -21,8 +21,8 @@ const ThankYou = () => {
             <p className="text-xl sm:text-2xl text-foreground font-serif leading-relaxed">
               ¡Todo listo! 🌱
             </p>
-            <p className="text-base text-muted-foreground font-sans leading-relaxed font-bold">
-              Ahora revisa tu correo electrónico. Ahí encontrarás toda la información sobre la plantita que llegó en tu papel semilla y cómo empezar a cultivarla.
+            <p className="text-base text-muted-foreground font-sans leading-relaxed">
+              <span className="font-bold text-foreground">Ahora revisa tu correo electrónico.</span> Ahí encontrarás toda la información sobre la plantita que llegó en tu papel semilla y cómo empezar a cultivarla.
             </p>
             <div className="border-t border-border/50 pt-5">
               <p className="text-sm text-muted-foreground/80 font-sans leading-relaxed">
@@ -31,7 +31,7 @@ const ThankYou = () => {
             </div>
           </div>
 
-          <div className="mt-10 bg-card/80 backdrop-blur-sm rounded-2xl border border-border/50 p-8 max-w-md mx-auto space-y-5">
+          <div className="mt-10 bg-card/80 backdrop-blur-sm rounded-2xl border-2 border-dashed border-primary/60 p-8 max-w-md mx-auto space-y-5">
             <div className="text-center space-y-3">
               <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-sans font-medium tracking-wide">
                 🎁 Regalo especial
@@ -44,7 +44,7 @@ const ThankYou = () => {
               </p>
             </div>
 
-            <div className="flex items-center justify-center gap-3 bg-background/60 border-2 border-dashed border-primary/60 rounded-xl px-5 py-4">
+            <div className="flex items-center justify-center gap-3 bg-background/60 border border-border/50 rounded-xl px-5 py-4">
               <span className="text-xs text-muted-foreground font-sans uppercase tracking-wider">Código:</span>
               <span className="text-xl sm:text-2xl font-serif text-foreground tracking-widest">100GRATIS</span>
             </div>
@@ -53,7 +53,7 @@ const ThankYou = () => {
               href="https://specialfitsocks.com/discount/100GRATIS"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-full h-13 px-6 rounded-xl bg-yellow-300 text-black font-sans text-base font-bold hover:bg-yellow-400 hover:scale-105 hover:-translate-y-0.5 animate-pulse transition-all duration-300 shadow-lg shadow-yellow-300/40"
+              className="inline-flex items-center justify-center w-full h-13 px-6 rounded-xl bg-yellow-300 text-black font-sans text-base font-bold hover:bg-yellow-400 hover:scale-105 hover:-translate-y-1 animate-neon-glow transition-all duration-300"
             >
               Visitar tienda oficial
             </a>
