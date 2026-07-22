@@ -7,9 +7,9 @@ const ThankYou = () => {
       <div className="absolute bottom-20 right-5 w-56 h-56 bg-accent/30 rounded-full blur-3xl" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-16">
+      <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-6 pt-10 pb-16">
         <div className="max-w-lg w-full text-center animate-fade-up">
-          <div className="w-24 h-24 mx-auto mb-8 rounded-full bg-primary/10 flex items-center justify-center">
+          <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
             <span className="text-5xl">🌱</span>
           </div>
 
