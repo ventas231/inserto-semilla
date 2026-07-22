@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import manzanillaImg from "@/assets/manzanilla.jpg";
 import florDeNubeImg from "@/assets/flor-de-nube.jpg";
 import chiaImg from "@/assets/chia.jpg";
+import perroImg from "@/assets/perro-planta-no-encontrada.jpg";
 import { Button } from "@/components/ui/button";
 import { Sprout, Droplets, Sun, Clock, AlertCircle } from "lucide-react";
 
@@ -70,6 +71,16 @@ const Reveal = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-6">
         <div className="text-center max-w-md mx-auto">
+          <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden mx-auto mb-6 shadow-lg bg-secondary/30">
+            <img
+              src={perroImg}
+              alt="Perrito amigable"
+              className="w-full h-full object-cover"
+              loading="lazy"
+              width={1024}
+              height={1024}
+            />
+          </div>
           <h1 className="text-3xl font-serif text-foreground mb-4">Planta no encontrada</h1>
           <Link to="/">
             <Button variant="elegant" size="lg">Volver al inicio</Button>
