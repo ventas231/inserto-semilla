@@ -9,29 +9,7 @@ const ThankYou = () => {
 
       <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-6 pt-10 pb-16">
         <div className="max-w-lg w-full text-center animate-fade-up">
-          <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
-            <span className="text-5xl">🌱</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl font-serif text-foreground mb-4 leading-tight">
-            ¡Gracias! Ya quedaste registrado. 🌱
-          </h1>
-
-          <div className="bg-card/80 backdrop-blur-sm rounded-2xl border border-border/50 p-8 mt-8 space-y-5">
-            <p className="text-xl sm:text-2xl text-foreground font-serif leading-relaxed">
-              ¡Todo listo! 🌱
-            </p>
-            <p className="text-base text-muted-foreground font-sans leading-relaxed">
-              <span className="font-bold text-foreground">Ahora revisa tu correo electrónico.</span> Ahí encontrarás toda la información sobre la plantita que llegó en tu papel semilla y cómo empezar a cultivarla.
-            </p>
-            <div className="border-t border-border/50 pt-5">
-              <p className="text-sm text-muted-foreground/80 font-sans leading-relaxed">
-                ⚠️ Si no ves el correo en tu bandeja principal, <span className="font-bold">revisa promociones o spam</span>.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-10 bg-card/80 backdrop-blur-sm rounded-2xl border-2 border-dashed border-primary/60 p-8 max-w-md mx-auto space-y-5">
+          <div className="bg-card/80 backdrop-blur-sm rounded-2xl border-2 border-dashed border-primary/60 p-8 max-w-md mx-auto space-y-5">
             <div className="text-center space-y-3">
               <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-sans font-medium tracking-wide animate-float shadow-sm">
                 🎁 Regalo especial
@@ -56,6 +34,28 @@ const ThankYou = () => {
             <p className="text-xs text-muted-foreground font-sans text-center leading-relaxed">
               Al usar este enlace, el descuento de $100 MXN se aplicará automáticamente en tu carrito.
             </p>
+          </div>
+
+          <div className="w-24 h-24 mx-auto mt-10 mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+            <span className="text-5xl">🌱</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl font-serif text-foreground mb-4 leading-tight">
+            ¡Gracias! Ya quedaste registrado. 🌱
+          </h1>
+
+          <div className="bg-card/80 backdrop-blur-sm rounded-2xl border border-border/50 p-8 mt-8 space-y-5">
+            <p className="text-xl sm:text-2xl text-foreground font-serif leading-relaxed">
+              ¡Todo listo! 🌱
+            </p>
+            <p className="text-base text-muted-foreground font-sans leading-relaxed">
+              <span className="font-bold text-foreground">Ahora revisa tu correo electrónico.</span> Ahí encontrarás toda la información sobre la plantita que llegó en tu papel semilla y cómo empezar a cultivarla.
+            </p>
+            <div className="border-t border-border/50 pt-5">
+              <p className="text-sm text-muted-foreground/80 font-sans leading-relaxed">
+                ⚠️ Si no ves el correo en tu bandeja principal, <span className="font-bold">revisa promociones o spam</span>.
+              </p>
+            </div>
           </div>
 
           <div className="mt-10 rounded-2xl overflow-hidden shadow-lg max-w-sm mx-auto">
