@@ -3,7 +3,7 @@ import manzanillaImg from "@/assets/manzanilla.jpg";
 import florDeNubeImg from "@/assets/flor-de-nube.jpg";
 import chiaImg from "@/assets/chia.jpg";
 import { Button } from "@/components/ui/button";
-import { Sprout, Droplets, Sun, Clock } from "lucide-react";
+import { Sprout, Droplets, Sun, Clock, AlertCircle } from "lucide-react";
 
 const plantData = {
   manzanilla: {
