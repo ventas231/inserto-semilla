@@ -89,7 +89,7 @@ const Reveal = () => {
           <div className="mt-8 inline-flex items-start gap-3 rounded-xl border border-primary/20 bg-primary/5 px-5 py-4 text-left">
             <AlertCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
             <p className="text-sm font-sans text-foreground/80 leading-relaxed">
-              El código de tu papel semilla está compuesto por <span className="font-semibold text-foreground">6 dígitos</span>. Verifica bien los números antes de continuar.
+              El código de tu papel semilla está compuesto por <span className="font-semibold text-foreground">6 dígitos</span> y los primeros 3 dígitos son <span className="font-semibold text-foreground">000</span>. Verifica bien los números antes de continuar.
             </p>
           </div>
         </div>
@@ -125,7 +125,7 @@ const Reveal = () => {
           <div className="animate-fade-up-delay-3 mt-8 inline-flex items-start gap-3 rounded-xl border border-primary/20 bg-primary/5 px-5 py-4 text-left max-w-md mx-auto">
             <AlertCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
             <p className="text-sm font-sans text-foreground/80 leading-relaxed">
-              El código de tu papel semilla está compuesto por <span className="font-semibold text-foreground">6 dígitos</span>. Verifica bien los números antes de continuar.
+              El código de tu papel semilla está compuesto por <span className="font-semibold text-foreground">6 dígitos</span> y los primeros 3 dígitos son <span className="font-semibold text-foreground">000</span>. Verifica bien los números antes de continuar.
             </p>
           </div>
         </div>
