@@ -3,7 +3,7 @@ import manzanillaImg from "@/assets/manzanilla.jpg";
 import florDeNubeImg from "@/assets/flor-de-nube.jpg";
 import chiaImg from "@/assets/chia.jpg";
 import { Button } from "@/components/ui/button";
-import { Sprout, Droplets, Sun, Clock } from "lucide-react";
+import { Sprout, Droplets, Sun, Clock, AlertCircle } from "lucide-react";
 
 const plantData = {
   manzanilla: {
@@ -103,6 +103,13 @@ const Reveal = () => {
           <p className="animate-fade-up-delay-3 text-lg text-muted-foreground font-sans max-w-lg mx-auto leading-relaxed">
             {data.description}
           </p>
+
+          <div className="animate-fade-up-delay-3 mt-8 inline-flex items-start gap-3 rounded-xl border border-primary/20 bg-primary/5 px-5 py-4 text-left max-w-md mx-auto">
+            <AlertCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+            <p className="text-sm font-sans text-foreground/80 leading-relaxed">
+              El código de tu papel semilla está compuesto por <span className="font-semibold text-foreground">6 dígitos</span>. Verifica bien los números antes de continuar.
+            </p>
+          </div>
         </div>
       </section>
 
