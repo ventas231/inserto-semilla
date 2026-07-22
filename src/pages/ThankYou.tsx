@@ -59,13 +59,17 @@ const ThankYou = () => {
             </div>
 
             <a
-              href="https://specialfitsocks.com/"
+              href="https://specialfitsocks.com/discount/100GRATIS"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center w-full h-13 px-6 rounded-xl bg-primary text-primary-foreground font-sans text-base font-medium hover:bg-primary/90 transition-colors duration-300"
             >
               Visitar tienda oficial
             </a>
+
+            <p className="text-xs text-muted-foreground font-sans text-center leading-relaxed">
+              Al usar este enlace, el descuento de $100 MXN se aplicará automáticamente en tu carrito.
+            </p>
           </div>
 
           <p className="text-center text-xs text-muted-foreground/50 font-sans mt-12">
