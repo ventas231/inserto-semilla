@@ -33,7 +33,7 @@ const ThankYou = () => {
 
           <div className="mt-10 bg-card/80 backdrop-blur-sm rounded-2xl border-2 border-dashed border-primary/60 p-8 max-w-md mx-auto space-y-5">
             <div className="text-center space-y-3">
-              <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-sans font-medium tracking-wide">
+              <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-sans font-medium tracking-wide animate-float shadow-sm">
                 🎁 Regalo especial
               </span>
               <h2 className="text-2xl sm:text-3xl font-serif text-foreground leading-tight">
