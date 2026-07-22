@@ -40,6 +40,34 @@ const ThankYou = () => {
             />
           </div>
 
+          <div className="mt-10 bg-card/80 backdrop-blur-sm rounded-2xl border border-border/50 p-8 max-w-md mx-auto space-y-5">
+            <div className="text-center space-y-3">
+              <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-sans font-medium tracking-wide">
+                Regalo especial
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-serif text-foreground leading-tight">
+                $100 MXN de dinero electrónico
+              </h2>
+              <p className="text-sm text-muted-foreground font-sans leading-relaxed">
+                Para tu siguiente compra en productos SpecialFit Socks. Válido al comprar 2 o más artículos.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 bg-background/60 border border-dashed border-primary/30 rounded-xl px-5 py-4">
+              <span className="text-xs text-muted-foreground font-sans uppercase tracking-wider">Código:</span>
+              <span className="text-xl sm:text-2xl font-serif text-foreground tracking-widest">100GRATIS</span>
+            </div>
+
+            <a
+              href="https://specialfitsocks.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center w-full h-13 px-6 rounded-xl bg-primary text-primary-foreground font-sans text-base font-medium hover:bg-primary/90 transition-colors duration-300"
+            >
+              Visitar tienda oficial
+            </a>
+          </div>
+
           <p className="text-center text-xs text-muted-foreground/50 font-sans mt-12">
             Papel Semilla · Una experiencia que florece
           </p>
