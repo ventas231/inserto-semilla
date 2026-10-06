@@ -1,73 +1,219 @@
-# Welcome to your Lovable project
+# Seedling Secret
 
-## Project info
+Diseña una landing page premium, elegante y altamente estética para una experiencia de papel semilla.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Objetivo de la página
 
-## How can I edit this code?
+Los usuarios escanean un código QR y llegan a esta landing.
+El objetivo es generar curiosidad para que ingresen su correo electrónico y así descubrir qué planta viene en su papel semilla.
 
-There are several ways of editing your application.
+A cambio recibirán:
 
-**Use Lovable**
+Una guía gratuita de plantado
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Cuidados específicos según la planta
 
-Changes made via Lovable will be committed automatically to this repo.
+Información sobre qué planta les tocó
 
-**Use your preferred IDE**
+Un video paso a paso de cómo plantar el papel semilla
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Solo se debe pedir correo electrónico (un solo campo).
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+🎨 Estilo Visual
 
-Follow these steps:
+Estética:
+
+Minimalista
+
+Premium
+
+Natural
+
+Limpia
+
+Elegante
+
+Moderna
+
+Sensación:
+
+Exclusiva
+
+Delicada
+
+Inspiradora
+
+Educativa
+
+Curiosa
+
+Diseño:
+
+Mucho espacio en blanco
+
+Tipografía serif moderna y elegante para títulos
+
+Tipografía sans serif limpia para textos
+
+Paleta de colores neutros (blanco, beige, verde suave, gris claro)
+
+Microanimaciones suaves (fade in, transiciones delicadas)
+
+Botones elegantes con bordes redondeados sutiles
+
+Diseño centrado y armonioso
+
+Nada recargado
+
+Experiencia fluida y estética
+
+🧠 Estructura de la Landing
+1. Hero Section
+
+Título grande y elegante:
+“No es solo papel. Es vida esperando despertar.”
+
+Subtítulo:
+“Descubre qué plantita llegó a tus manos y recibe una guía exclusiva para verla florecer.”
+
+Botón principal:
+“Descubrir mi planta”
+
+Debajo del botón:
+Texto pequeño que diga:
+“Recibe tu guía gratuita directamente en tu correo.”
+
+2. Sección Storytelling (emocional y curiosa)
+
+Texto envolvente que transmita:
+
+Que el papel semilla contiene vida
+
+Que es una experiencia
+
+Que dentro hay una sorpresa
+
+Que solo dejando el correo pueden descubrirla
+
+Debe sentirse poético, delicado y aspiracional.
+
+3. Sección de Beneficios
+
+Presentar en formato visual atractivo (iconos minimalistas):
+
+Incluye:
+
+Guía completa para plantar correctamente el papel semilla
+
+Cuidados específicos según la planta
+
+Recomendaciones de luz y riego
+
+Tiempo estimado de germinación
+
+Video tutorial paso a paso
+
+Diseño limpio en bloques o cards elegantes.
+
+4. Sección de Misterio
+
+Texto que indique que existen dos posibles plantas:
+
+Manzanilla
+
+Flor de nube
+
+Pero no revelar cuál es hasta que ingresen el correo.
+
+CTA final destacado:
+“Quiero revelar mi planta”
+
+📩 Formulario
+
+Diseño minimalista.
+Un solo campo:
+Correo electrónico.
+
+Botón:
+“Desbloquear mi guía”
+
+Después del registro, redirigir a una página de revelación personalizada según la planta.
+
+🌼 Página de Revelación (dinámica)
+
+Debe haber dos versiones:
+
+Versión 1 – Manzanilla
+
+Mostrar:
+
+Título: “Tu planta es Manzanilla”
+
+Breve descripción educativa y elegante
+
+Instrucciones claras de plantado
+
+Tiempo de germinación
+
+Cuidados
+
+Botón para ver video tutorial
+
+Estética natural, delicada, cálida.
+
+Versión 2 – Flor de nube
+
+Mostrar:
+
+Título: “Tu planta es Flor de nube”
+
+Descripción elegante
+
+Instrucciones claras
+
+Tiempo de germinación
+
+Cuidados
+
+Botón para ver video tutorial
+
+Estética ligera, suave, etérea.
+
+⚙️ Comportamiento Técnico
+
+Diseño completamente responsive
+
+Optimizado para móviles (principal tráfico será desde QR)
+
+Carga rápida
+
+Animaciones suaves
+
+Sensación de experiencia exclusiva
+
+No parecer una página agresiva de captura de leads
+
+Debe sentirse como una experiencia premium
+
+This project was built with [Lovable](https://lovable.dev).
+
+**Live app**: https://seed-to-reveal.lovable.app
+
+## Build with Lovable
+
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/420febc3-ed7a-4348-8b58-c25075be84dd).
+
+- **Ship faster**: describe what you want to build and Lovable handles the code.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+
+## Development
+
+Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
+git clone <this-repository-url>
+cd <repository-name>
 npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
