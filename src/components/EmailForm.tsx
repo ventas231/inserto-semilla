@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { Leaf, Mail } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { invocar } from "@/lib/integraciones";
 
 const codeMap: Record<string, string> = {
   "000756": "flor-de-nube",
@@ -100,8 +100,8 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
 
       const klaviyoPayload = { ...payload, papel_semilla, origen: "plantita" };
       const [shopifyResult, klaviyoResult] = await Promise.allSettled([
-        supabase.functions.invoke("shopify-customer", { body: payload }),
-        supabase.functions.invoke("klaviyo-subscribe", { body: klaviyoPayload }),
+        invocar("shopify-customer", payload),
+        invocar("klaviyo-subscribe", klaviyoPayload),
       ]);
 
       if (shopifyResult.status === "rejected") {

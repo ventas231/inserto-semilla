@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
+import { invocar } from "@/lib/integraciones";
 import plantingToolsImg from "@/assets/planting-tools.jpg";
 import growingPlantsImg from "@/assets/growing-plants.jpg";
 import caringPlantImg from "@/assets/caring-plant.jpg";
@@ -47,9 +47,7 @@ const SelectPlant = () => {
     }
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("shopify-customer", {
-        body: { email, code: result.data },
-      });
+      const { data, error: fnError } = await invocar("shopify-customer", { email, code: result.data });
 
       if (fnError) {
         console.warn("Edge function network error:", fnError.message);
