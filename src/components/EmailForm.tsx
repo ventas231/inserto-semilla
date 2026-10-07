@@ -99,23 +99,12 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
       };
 
       const klaviyoPayload = { ...payload, papel_semilla, origen: "plantita" };
-      const [shopifyResult, klaviyoResult] = await Promise.allSettled([
-        invocar("shopify-customer", payload),
-        invocar("klaviyo-subscribe", klaviyoPayload),
-      ]);
+      const klaviyoResult = await invocar("klaviyo-subscribe", klaviyoPayload);
 
-      if (shopifyResult.status === "rejected") {
-        console.warn("Shopify error:", shopifyResult.reason);
-      } else if (shopifyResult.value.error || !shopifyResult.value.data?.success) {
-        console.warn("Shopify response:", shopifyResult.value.error || shopifyResult.value.data);
-      }
-
-      if (klaviyoResult.status === "rejected") {
-        console.error("Klaviyo error:", klaviyoResult.reason);
-      } else if (klaviyoResult.value.error || !klaviyoResult.value.data?.success) {
-        console.error("Klaviyo response:", klaviyoResult.value.error || klaviyoResult.value.data);
+      if (klaviyoResult.error || !klaviyoResult.data?.success) {
+        console.error("Klaviyo response:", klaviyoResult.error || klaviyoResult.data);
       } else {
-        console.log("Klaviyo response:", klaviyoResult.value.data);
+        console.log("Klaviyo response:", klaviyoResult.data);
       }
 
       navigate("/gracias");

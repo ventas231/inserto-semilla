@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { invocar } from "@/lib/integraciones";
 import plantingToolsImg from "@/assets/planting-tools.jpg";
 import growingPlantsImg from "@/assets/growing-plants.jpg";
 import caringPlantImg from "@/assets/caring-plant.jpg";
@@ -46,28 +45,9 @@ const SelectPlant = () => {
       return;
     }
 
-    try {
-      const { data, error: fnError } = await invocar("shopify-customer", { email, code: result.data });
-
-      if (fnError) {
-        console.warn("Edge function network error:", fnError.message);
-        // Show success anyway — the code is valid and the email was captured
-        // Shopify sync can be retried later
-      } else if (data && !data.success) {
-        console.warn("Shopify sync failed:", data.error);
-        // Same graceful handling — don't block the user experience
-      }
-
-      sessionStorage.removeItem("user_email");
-      setSuccess(true);
-      setIsSubmitting(false);
-    } catch (err: unknown) {
-      console.warn("Shopify sync error (non-blocking):", err);
-      // Still show success — the user experience shouldn't be blocked by Shopify issues
-      sessionStorage.removeItem("user_email");
-      setSuccess(true);
-      setIsSubmitting(false);
-    }
+    sessionStorage.removeItem("user_email");
+    setSuccess(true);
+    setIsSubmitting(false);
   };
 
   if (success) {
