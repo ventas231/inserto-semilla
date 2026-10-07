@@ -9,8 +9,8 @@ const STOREFRONT_TOKEN = "85e8e43d4385add11d8292875b2c67de";
 
 // Klaviyo: llave PÚBLICA (Site ID, 6 caracteres) e ID de la lista
 // "Seedling Secret - Suscriptores". Vacías = no se suscribe a Klaviyo.
-export const KLAVIYO_PUBLIC_KEY = "";
-export const KLAVIYO_LIST_ID = "";
+export const KLAVIYO_PUBLIC_KEY = "H6mKTg";
+export const KLAVIYO_LIST_ID = "WthbWD";
 const KLAVIYO_REVISION = "2024-10-15";
 
 type Body = {
