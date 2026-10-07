@@ -1,0 +1,13 @@
+# Prueba temporal (solo lectura): ¿la llave pública de Shopify sigue activa?
+name: Verificar Shopify
+on:
+  push:
+    branches: [claude/summaproducts-footer-test-0ebqm8]
+    paths: [.github/workflows/verificar-shopify.yml]
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -sS -X POST https://specializedsocks.myshopify.com/api/2024-01/graphql.json             -H 'Content-Type: application/json' -H 'Origin: https://inserto.specialfitsocks.com'             -H 'X-Shopify-Storefront-Access-Token: 85e8e43d4385add11d8292875b2c67de'             -d '{"query":"{ shop { name } }"}' -D /tmp/h -w "\nHTTP %{http_code}\n"
+          grep -i "access-control-allow-origin" /tmp/h || echo "sin cabecera CORS"
