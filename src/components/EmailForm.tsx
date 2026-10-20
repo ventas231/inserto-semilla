@@ -103,8 +103,9 @@ const EmailForm = ({ formRef }: EmailFormProps) => {
 
       if (klaviyoResult.error || !klaviyoResult.data?.success) {
         console.error("Klaviyo response:", klaviyoResult.error || klaviyoResult.data);
-      } else {
-        console.log("Klaviyo response:", klaviyoResult.data);
+        setResultMessage("No se pudo guardar. Intenta de nuevo.");
+        setResultType("error");
+        return;
       }
 
       navigate("/gracias");
