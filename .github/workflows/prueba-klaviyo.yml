@@ -13,7 +13,7 @@ jobs:
           curl -sS -X POST "https://a.klaviyo.com/client/subscriptions?company_id=H6mKTg" \
             -H 'Content-Type: application/vnd.api+json' -H 'Accept: application/vnd.api+json' \
             -H 'revision: 2024-10-15' -H 'Origin: https://inserto.specialfitsocks.com' \
-            -d '{"data":{"type":"subscription","attributes":{"profile":{"data":{"type":"profile","attributes":{"email":"ventas+prueba-inserto@instanutra360.com","first_name":"Prueba Inserto","subscriptions":{"email":{"marketing":{"consent":"SUBSCRIBED"}}},"properties":{"tags":["flor-de-nube","papel-nube","mexico"],"papel_semilla":"nube","origen":"plantita"}}}}},"relationships":{"list":{"data":{"type":"list","id":"WthbWD"}}}}}' \
+            -d '{"data":{"type":"subscription","attributes":{"profile":{"data":{"type":"profile","attributes":{"email":"ventas+prueba-inserto@instanutra360.com","first_name":"Prueba Inserto","properties":{"tags":["flor-de-nube","papel-nube","mexico"],"papel_semilla":"nube","origen":"plantita"}}}}},"relationships":{"list":{"data":{"type":"list","id":"WthbWD"}}}}}' \
             -w "\nHTTP %{http_code}\n"
       - run: |
           for u in https://inserto.specialfitsocks.com/ https://ventas231.github.io/inserto-semilla/; do
