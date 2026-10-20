@@ -35,7 +35,6 @@ async function klaviyoSubscribe({ email, firstName, tags, papel_semilla, origen 
             attributes: {
               email,
               ...(firstName ? { first_name: firstName } : {}),
-              subscriptions: { email: { marketing: { consent: "SUBSCRIBED" } } },
               properties: {
                 ...(tagList.length > 0 ? { tags: tagList } : {}),
                 papel_semilla: typeof papel_semilla === "string" && papel_semilla.trim() ? papel_semilla.trim() : null,
